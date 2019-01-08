@@ -11,19 +11,15 @@ flash way changed, intensity changed, screenCheck(); advance work
 **********************************************************************/
 //#define DEBUG
 #include "stm32f10x.h"
-#include "delay.h"
 #include "sys.h"
-#include "usart.h"
 #include "timer.h"
-#include "adc.h"
 #include "exti.h"
-#include "dwDriver.h"
 #include "AppLib.h"
 
 /******************************
 wifi model
 *******************************/
-const char CreateAP[] = "AT+CWSAP=\"DDD\",\"123456789\",3,2";
+/* const char CreateAP[] = "AT+CWSAP=\"DDD\",\"123456789\",3,2";
 const char CreateAP_Return[] = "OK";
 const char CheckIP[] = "AT+CWLIF";
 const char SendData[] = "AT+CIPSEND=";
@@ -45,7 +41,7 @@ void WifiUart(const char *str)
 		while(!USART_GetFlagStatus(USART1, USART_FLAG_TC));
 	}
 }
-
+ */
 int main()
 {	
 	NVIC_Configuration(); 	//设置NVIC中断分组2:2位抢占优先级，2位响应优先级

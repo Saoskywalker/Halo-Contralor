@@ -1,5 +1,8 @@
 {
     "files.encoding": "gb2312",
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 30000
+    "files.autoSaveDelay": 30000,
+    "files.associations": {
+        "applib.h": "c"
+    }
 }
