@@ -3,6 +3,8 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 30000,
     "files.associations": {
-        "applib.h": "c"
+        "applib.h": "c",
+        "usart.h": "c",
+        "mpuiic.h": "c"
     }
 }

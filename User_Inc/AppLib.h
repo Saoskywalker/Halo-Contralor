@@ -30,4 +30,6 @@
 //Flash function
 #define FLASH_SAVE_ADDR  0X0800F800 				//设置FLASH 保存地址(必须为偶数)
 
+void IO_Init(void);
+
 #endif
