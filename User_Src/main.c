@@ -48,7 +48,12 @@ int main()
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
 	Adc_Init();	
-	EXTIX_Init();		 
+	EXTIX_Init();	
+	MPU_Init();
+	if(mpu_dmp_init())
+	{
+		printf("MPU6050 ERROR");
+	}	 
 	TIM4_PWM_Init(36000,0);	//BIO 2Khz.
 	TIM_SetCompare4(TIM4,36000);	//BIO voltage
 	TIM_SetCompare3(TIM4,0);	//BIO output
@@ -65,3 +70,4 @@ int main()
 	{
 
 	}
+}
