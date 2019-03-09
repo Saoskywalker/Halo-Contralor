@@ -47,18 +47,21 @@ int main()
 	uart1_init(115200);	//To PC
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
-	Adc_Init();	
-	EXTIX_Init();	
-	MPU_Init();
+	// Adc_Init();	
+	EXTIX_Init();
+	
+	if(DHT11_Init()) //dht11 init
+	{
+		printf("dht11 ERROR"); 
+	}	 
+
+	MPU_Init(); //MPU6050
 	if(mpu_dmp_init())
 	{
 		printf("MPU6050 ERROR");
 	}	 
-	TIM4_PWM_Init(36000,0);	//BIO 2Khz.
-	TIM_SetCompare4(TIM4,36000);	//BIO voltage
-	TIM_SetCompare3(TIM4,0);	//BIO output
-	TIM3_PWM_Init(102,0);	//RF 700Khz.
-	TIM1_PWM_Init((u16)(72000/26.3), 0);	//Scrubber Init 26.3kHz
+
+	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(999,70);	//1ms
 	
 #ifndef DEBUG

@@ -78,6 +78,7 @@ u8 DHT11_Read_Byte(void)
     }						    
     return dat;
 }
+
 //从DHT11读取一次数据
 //temp:温度值(范围:0~50°)
 //humi:湿度值(范围:20%~90%)
@@ -101,6 +102,7 @@ u8 DHT11_Read_Data(u8 *temp,u8 *humi)
 	}else return 1;
 	return 0;	    
 }
+
 //初始化DHT11的IO口 DQ 同时检测DHT11的存在
 //返回1:不存在
 //返回0:存在    	 
@@ -108,13 +110,13 @@ u8 DHT11_Init(void)
 {	 
  	GPIO_InitTypeDef  GPIO_InitStructure;
  	
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);	 //使能PG端口时钟
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //使能PG端口时钟
 	
- 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;				 //PG11端口配置
+ 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;				 //端口配置
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
- 	GPIO_Init(GPIOG, &GPIO_InitStructure);				 //初始化IO口
- 	GPIO_SetBits(GPIOG,GPIO_Pin_11);						 //PG11 输出高
+ 	GPIO_Init(GPIOB, &GPIO_InitStructure);				 //初始化IO口
+ 	GPIO_SetBits(GPIOB,GPIO_Pin_8);						 // 输出高
 			    
 	DHT11_Rst();  //复位DHT11
 	return DHT11_Check();//等待DHT11的回应

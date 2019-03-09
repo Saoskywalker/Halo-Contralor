@@ -6,6 +6,7 @@
 #include "delay.h"
 #include "adc.h"
 #include "stmflash.h"
+#include "dht11.h"
 
 //Temperature table
 #define TEMP_40 1418
