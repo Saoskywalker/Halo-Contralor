@@ -15,8 +15,8 @@
 //////////////////////////////////////////////////////////////////////////////////
  
 //IO方向设置
-#define DHT11_IO_IN()  {GPIOB->CRH&=0XFFFF0FFF;GPIOB->CRH|=8<<12;}
-#define DHT11_IO_OUT() {GPIOB->CRH&=0XFFFF0FFF;GPIOB->CRH|=3<<12;}
+#define DHT11_IO_IN()  {GPIOB->CRH&=0XFFFFFFF0;GPIOB->CRH|=8<<0;}
+#define DHT11_IO_OUT() {GPIOB->CRH&=0XFFFFFFF0;GPIOB->CRH|=3<<0;}
 ////IO操作函数											   
 #define	DHT11_DQ_OUT PBout(8) //数据端口	PB8
 #define	DHT11_DQ_IN  PBin(8)  //数据端口	PB8
