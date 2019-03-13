@@ -43,6 +43,7 @@ int main()
 {	
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
+	WKUP_Init(); //stand by & wake uoinit
 	IO_Init();
 	uart1_init(115200);	//To PC
 	uart2_init(115200);	//To distinguish
