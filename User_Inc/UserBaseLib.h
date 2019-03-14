@@ -31,5 +31,6 @@
 #define BIT7_1 0x80
 
 u8 RestoreFlag(void);	//Check MCU restore reason
+void SystemReset(void);
 
 #endif

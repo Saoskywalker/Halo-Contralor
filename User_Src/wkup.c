@@ -1,7 +1,8 @@
 #include "wkup.h"
 #include "delay.h"
+#include "UserBaseLib.h"
 
-//////////////////////////////////////////////////////////////////////////////////	 
+////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK战舰STM32开发板
 //待机唤醒 代码	   
@@ -12,11 +13,12 @@
 //版权所有，盗版必究。
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 	 
 void Sys_Standby(void)
 {  
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);	//使能PWR外设时钟
+	//使能PWR外设时钟
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);	
 	PWR_WakeUpPinCmd(ENABLE);  //使能唤醒管脚功能
 	PWR_EnterSTANDBYMode();	  //进入待命（STANDBY）模式 		 
 }
@@ -59,57 +61,47 @@ void EXTI0_IRQHandler(void)
 { 		    		    				     		    
 	if (EXTI_GetITStatus(EXTI_Line0) != RESET)
 	{
-		if (Check_WKUP()) //关机?
+		if (Check_WKUP()) //检测键
 		{
-			Sys_Enter_Standby();
+			SystemReset(); //先重启关闭看门狗, 再待机
+			//Sys_Enter_Standby();
 		}
 		EXTI_ClearITPendingBit(EXTI_Line0); //清除线路挂起位
 	}
-} 
+}
 
 //PA0 WKUP唤醒初始化
 void WKUP_Init(void)
-{	
-  GPIO_InitTypeDef  GPIO_InitStructure;  		  
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	EXTI_InitTypeDef EXTI_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);//使能GPIOA和复用功能时钟
+	//使能GPIOA和复用功能时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE); 
 
-	GPIO_InitStructure.GPIO_Pin =GPIO_Pin_0;	 //PA.0
-	GPIO_InitStructure.GPIO_Mode =GPIO_Mode_IPD;//下拉输入
-	GPIO_Init(GPIOA, &GPIO_InitStructure);	//初始化IO
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;	 //PA.0
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD; //下拉输入
+	GPIO_Init(GPIOA, &GPIO_InitStructure);		  //初始化IO
 
-  //使用外部中断方式
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0);	//中断线0连接GPIOA.0
+	//使用外部中断方式
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0); //中断线0连接GPIOA.0
 
-  EXTI_InitStructure.EXTI_Line = EXTI_Line0;	//设置按键所有的外部线路
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;			//设外外部中断模式:EXTI线路为中断请求
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;  //上升沿触发
- 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	EXTI_Init(&EXTI_InitStructure);	// 初始化外部中断
+	EXTI_InitStructure.EXTI_Line = EXTI_Line0;			   //设置按键所有的外部线路
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	//设外外部中断模式:EXTI线路为中断请求
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿触发
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_Init(&EXTI_InitStructure); // 初始化外部中断
 
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn; //使能按键所在的外部中断通道
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;		  //使能按键所在的外部中断通道
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3; //先占优先级3级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3; //从优先级3级
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //使能外部中断通道
-	NVIC_Init(&NVIC_InitStructure); //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			  //使能外部中断通道
+	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+	NVIC_Init(&NVIC_InitStructure);							  
 
-	if(Check_WKUP()==0) Sys_Standby();    //不是开机,进入待机模式  
+	if(RestoreFlag()==2) //继续软复位后的待机
+		Sys_Standby();
+	else if (Check_WKUP() == 0)
+		Sys_Standby(); //不是开机,进入待机模式
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -7,10 +7,6 @@ History:
 2019.2.26: create
 **********************************************************************/
 //#define DEBUG
-#include "stm32f10x.h"
-#include "sys.h"
-#include "timer.h"
-#include "exti.h"
 #include "AppLib.h"
 
 /******************************
@@ -43,14 +39,16 @@ int main()
 {	
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
-	WKUP_Init(); //stand by & wake uoinit
+	WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	uart1_init(115200);	//To PC
+	printf("wake up");
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
 	// Adc_Init();	
 	EXTIX_Init();
-	
+	RTC_Init();	  			//RTC init
+
 	if(DHT11_Init()) //dht11 init
 	{
 		printf("dht11 ERROR"); 

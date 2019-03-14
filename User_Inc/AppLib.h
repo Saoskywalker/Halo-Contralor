@@ -2,11 +2,14 @@
 #define _APP_LIB_H
 
 #include "UserBaseLib.h"
+#include "timer.h"
 #include "usart.h"
+#include "exti.h"
 #include "delay.h"
 #include "adc.h"
 #include "stmflash.h"
 #include "dht11.h"
+#include "rtc.h" 
 
 //Temperature table
 #define TEMP_40 1418

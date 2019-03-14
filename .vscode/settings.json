@@ -8,6 +8,9 @@
         "mpuiic.h": "c",
         "exti.h": "c",
         "led.h": "c",
-        "wkup.h": "c"
+        "wkup.h": "c",
+        "userbaselib.h": "c",
+        "sys.h": "c",
+        "delay.h": "c"
     }
 }
