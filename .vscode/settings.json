@@ -11,6 +11,11 @@
         "wkup.h": "c",
         "userbaselib.h": "c",
         "sys.h": "c",
-        "delay.h": "c"
+        "delay.h": "c",
+        "stm32f10x.h": "c",
+        "stm32f10x_conf.h": "c",
+        "timer.h": "c",
+        "rtc.h": "c",
+        "set_io.h": "c"
     }
 }

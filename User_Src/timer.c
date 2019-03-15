@@ -1,5 +1,8 @@
+#define DISABLE_IWDG
+
 #include "timer.h"
-#include "AppLib.h"
+#include "Set_IO.h" 
+#include "UserBaseLib.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK战舰STM32开发板
@@ -121,51 +124,24 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 //定时器2中断服务程序
 void TIM2_IRQHandler(void)   //TIM2中断 1ms
 {
-	static u16 Flag1sCnt = 0, Flag50msCnt = 0;
+	static u16 Flag1sCnt = 0;
 //	#ifdef DEBUG
 //		DEBUG_TIME_PIN = 1;
 //	#endif
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)  //检查TIMx更新中断发生与否
 	{
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);  //清除TIMx更新中断标志 
-		Flag1ms = 1;
 		
-		 #ifndef DEBUG
+		 #ifndef DISABLE_IWDG
 			IWDG_FEED_INLINE();
 		 #endif
-		
-		if(++Flag50msCnt>=50)
-		{
-			Flag50msCnt = 0;
-			Flag50ms = 1;
-		}
-		
-		ScrubberPWM(ScrubberMode, ScrubberWorkFlag);		
-		UltrasoundPWM(UltrasoundMode, UltrasoundWorkFlag);				
-		if(BIO1WorkFlag)
-			BIO1PWM(BIO1Mode, BIO1WorkFlag);
-		else
-			BIO2PWM(BIO2Mode, BIO2WorkFlag);
-		RFPWM(RFMode, RFWorkFlag);
-			
-		BeeFunction();
-				
-		if(ScrubberWorkFlag||O2WorkFlag||RFWorkFlag||BIO1WorkFlag||BIO2WorkFlag||CleanWorkFlag||UltrasoundWorkFlag||ColdWorkFlag)
-		{
-			if(++Flag1sCnt>=1000)	//1s
-			{
-				Flag1sCnt = 0;
-				Flag1s = 1;
-			}
-		}
-		else
+
+		if((++Flag1sCnt>=1000))	//1s
 		{
 			Flag1sCnt = 0;
-			Flag1s = 0;
+			// DEBUG_LED = ~DEBUG_LED;
 		}
-//		#ifdef DEBUG
-//			DEBUG_TIME_PIN = 0;
-//		#endif
+
 	}
 }
 

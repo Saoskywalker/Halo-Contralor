@@ -1,4 +1,5 @@
 #include "exti.h"
+#include "Set_IO.h"
 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -23,12 +24,11 @@ void EXTIX_Init(void)
  	NVIC_InitTypeDef NVIC_InitStructure;
 	
 	//int pin input
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 
+	//使能IO&复用功能时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);	 
 	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_3|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //设置成上拉输入
  	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);	//使能IO&复用功能时钟
 
   //中断线以及中断初始化配置   下降沿触发
   	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB,GPIO_PinSource3);
@@ -67,7 +67,7 @@ void EXTI3_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line3) != RESET)
 	{
-
+		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line3); //清除线路挂起位
 	}
 
@@ -78,25 +78,25 @@ void EXTI15_10_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line12) != RESET)
 	{
-
+		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line12); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line13) != RESET)
 	{
-
+		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line13); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line14) != RESET)
 	{
-
+		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line14); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line15) != RESET)
 	{
-
+		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line15); //清除线路挂起位
 	}
 }

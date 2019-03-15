@@ -43,7 +43,7 @@ u8 Check_WKUP(void)
 		{
 			t++;			//已经按下了 
 			delay_ms(30);
-			if(t>=100)		//按下超过3秒钟
+			if(t>=70)		//按下超过3秒钟
 			{
 				return 1; 	//按下3s以上了
 			}
@@ -63,8 +63,8 @@ void EXTI0_IRQHandler(void)
 	{
 		if (Check_WKUP()) //检测键
 		{
-			SystemReset(); //先重启关闭看门狗, 再待机
-			//Sys_Enter_Standby();
+			// SystemReset(); //先重启关闭看门狗, 再待机
+			Sys_Enter_Standby();
 		}
 		EXTI_ClearITPendingBit(EXTI_Line0); //清除线路挂起位
 	}
@@ -85,23 +85,23 @@ void WKUP_Init(void)
 	GPIO_Init(GPIOA, &GPIO_InitStructure);		  //初始化IO
 
 	//使用外部中断方式
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0); //中断线0连接GPIOA.0
+	// GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0); //中断线0连接GPIOA.0
 
-	EXTI_InitStructure.EXTI_Line = EXTI_Line0;			   //设置按键所有的外部线路
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	//设外外部中断模式:EXTI线路为中断请求
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿触发
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	EXTI_Init(&EXTI_InitStructure); // 初始化外部中断
+	// EXTI_InitStructure.EXTI_Line = EXTI_Line0;			   //设置按键所有的外部线路
+	// EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	//设外外部中断模式:EXTI线路为中断请求
+	// EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿触发
+	// EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	// EXTI_Init(&EXTI_InitStructure); // 初始化外部中断
 
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;		  //使能按键所在的外部中断通道
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3; //先占优先级3级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		  //从优先级3级
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			  //使能外部中断通道
-	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
-	NVIC_Init(&NVIC_InitStructure);							  
+	// NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;		  //使能按键所在的外部中断通道
+	// NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3; //先占优先级3级
+	// NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		  //从优先级3级
+	// NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			  //使能外部中断通道
+	// //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+	// NVIC_Init(&NVIC_InitStructure);							  
 
-	if(RestoreFlag()==2) //继续软复位后的待机
-		Sys_Standby();
-	else if (Check_WKUP() == 0)
+	// if(RestoreFlag()==2) //继续软复位后的待机
+	// 	Sys_Standby();
+	if (Check_WKUP() == 0)
 		Sys_Standby(); //不是开机,进入待机模式
 }

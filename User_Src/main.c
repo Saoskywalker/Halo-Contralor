@@ -6,7 +6,8 @@ Function:
 History: 
 2019.2.26: create
 **********************************************************************/
-//#define DEBUG
+#define DISABLE_IWDG
+
 #include "AppLib.h"
 
 /******************************
@@ -39,37 +40,38 @@ int main()
 {	
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
-	WKUP_Init(); //stand by & wake up init
+	//WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	uart1_init(115200);	//To PC
-	printf("wake up");
+	printf("wake up\n");
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
 	// Adc_Init();	
 	EXTIX_Init();
-	RTC_Init();	  			//RTC init
+	// RTC_Init(); //RTC init, osc have problem
 
 	if(DHT11_Init()) //dht11 init
 	{
-		printf("dht11 ERROR"); 
+		printf("dht11 ERROR\n"); 
 	}	 
 
 	MPU_Init(); //MPU6050
 	if(mpu_dmp_init())
 	{
-		printf("MPU6050 ERROR");
+		printf("MPU6050 ERROR\n");
 	}	 
 
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(999,70);	//1ms
 	
-#ifndef DEBUG
+#ifndef DISABLE_IWDG
 //prescaler 256,reload 625,over time 4s
 	IWDG_Init(IWDG_Prescaler_256,625);  
 #endif
 			
 	while(1)
 	{
-
+		if (Check_WKUP())
+			Sys_Enter_Standby(); //不是开机,进入待机模式
 	}
 }

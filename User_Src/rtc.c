@@ -1,11 +1,12 @@
 #include "sys.h"
 #include "delay.h"
-#include "rtc.h" 		    
+#include "rtc.h" 	
+#include "usart.h"	
+
 //Mini STM32开发板
 //RTC实时时钟 驱动代码			 
 //正点原子@ALIENTEK
-//2010/6/6
-	   
+//2010/6/6   
 _calendar_obj calendar;//时钟结构体 
  
 static void RTC_NVIC_Config(void)
@@ -29,22 +30,24 @@ u8 RTC_Init(void)
 	u8 temp = 0;
 
 	//使能PWR和BKP外设时钟
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE); 
-	//使能后备寄存器访问
-	PWR_BackupAccessCmd(ENABLE);	
-	//从指定的后备寄存器中读出数据:读出了与写入的指定数据不相乎																					 
-	if (BKP_ReadBackupRegister(BKP_DR1) != 0x5050)													 
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+	PWR_BackupAccessCmd(ENABLE); //使能后备寄存器访问
+	//从指定的后备寄存器中读出数据:读出了与写入的指定数据不相乎
+	if (BKP_ReadBackupRegister(BKP_DR1) != 0x5050)
 	{
-		BKP_DeInit();									//复位备份区域
-		RCC_LSEConfig(RCC_LSE_ON);		//设置外部低速晶振(LSE),使用外设低速晶振
+		BKP_DeInit();							 //复位备份区域
+		RCC_LSEConfig(RCC_LSE_ON); //设置外部低速晶振(LSE),使用外设低速晶振
 		//检查指定的RCC标志位设置与否,等待低速晶振就绪
-		while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET && temp < 250) 	
+		while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET && temp < 250)
 		{
 			temp++;
 			delay_ms(10);
 		}
 		if (temp >= 250)
-			return 1;																//初始化时钟失败,晶振有问题
+		{
+			printf("rtc osc error\n");
+			return 1;	//外部时钟错误返回
+		}
 		RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);		//设置RTC时钟(RTCCLK),选择LSE作为RTC时钟
 		RCC_RTCCLKCmd(ENABLE);										//使能RTC时钟
 		RTC_WaitForLastTask();										//等待最近一次对RTC寄存器的写操作完成
@@ -52,18 +55,18 @@ u8 RTC_Init(void)
 		RTC_ITConfig(RTC_IT_SEC, ENABLE);					//使能RTC秒中断
 		RTC_WaitForLastTask();										//等待最近一次对RTC寄存器的写操作完成
 		RTC_EnterConfigMode();										//允许配置
-		RTC_SetPrescaler(32767);									//设置RTC预分频的值
+		RTC_SetPrescaler(9600);									//设置RTC预分频的值, 外部晶振,原32767
 		RTC_WaitForLastTask();										//等待最近一次对RTC寄存器的写操作完成
-		RTC_Set(2015, 1, 14, 17, 42, 55);					//设置时间
+		RTC_Set(2019, 3, 15, 10, 13, 55);					//设置时间
 		RTC_ExitConfigMode();											//退出配置模式
 		BKP_WriteBackupRegister(BKP_DR1, 0X5050); //向指定的后备寄存器中写入用户程序数据
+		printf("Time init update\n");
 	}
 	else //系统继续计时
 	{
-
-		RTC_WaitForSynchro();							//等待最近一次对RTC寄存器的写操作完成
-		RTC_ITConfig(RTC_IT_SEC, ENABLE); //使能RTC秒中断
-		RTC_WaitForLastTask();						//等待最近一次对RTC寄存器的写操作完成
+		RTC_WaitForSynchro();										//等待最近一次对RTC寄存器的写操作完成
+		RTC_ITConfig(RTC_IT_SEC, ENABLE);				//使能RTC秒中断
+		RTC_WaitForLastTask();									//等待最近一次对RTC寄存器的写操作完成
 	}
 	RTC_NVIC_Config(); //RCT中断分组设置
 	RTC_Get();				 //更新时间
@@ -71,26 +74,32 @@ u8 RTC_Init(void)
 }
 
 //RTC时钟中断
-//每秒触发一次  
-//extern u16 tcnt; 
+//每秒触发一次
+//extern u16 tcnt;
 void RTC_IRQHandler(void)
-{		 
-	if (RTC_GetITStatus(RTC_IT_SEC) != RESET)//秒钟中断
-	{							
-		RTC_Get();//更新时间   
- 	}
-	if(RTC_GetITStatus(RTC_IT_ALR)!= RESET)//闹钟中断
+{
+	if (RTC_GetITStatus(RTC_IT_SEC) != RESET) //秒钟中断
 	{
-		RTC_ClearITPendingBit(RTC_IT_ALR);		//清闹钟中断	  	
-	  RTC_Get();				//更新时间   
-  	//printf("Alarm Time:%d-%d-%d %d:%d:%d\n",calendar.w_year,
+		RTC_ClearITPendingBit(RTC_IT_SEC); //清秒中断
+		// DEBUG_LED = ~DEBUG_LED;
+		RTC_Get();												 //更新时间
+		printf("Time:%d-%d-%d %d:%d:%d\n", calendar.w_year,
+					 calendar.w_month, calendar.w_date, calendar.hour,
+					 calendar.min, calendar.sec); //输出时间
+	}
+	if (RTC_GetITStatus(RTC_IT_ALR) != RESET) //闹钟中断
+	{
+		RTC_ClearITPendingBit(RTC_IT_ALR); //清闹钟中断
+		RTC_Get();												 //更新时间
+		printf("Alarm");
+		//printf("Alarm Time:%d-%d-%d %d:%d:%d\n",calendar.w_year,
 		//       calendar.w_month,calendar.w_date,calendar.hour,
-		//					calendar.min,calendar.sec);    //输出闹铃时间	
-		
-  	} 				  								 
-	RTC_ClearITPendingBit(RTC_IT_SEC|RTC_IT_OW);		//清闹钟中断
-	RTC_WaitForLastTask();	  	    						 	   	 
+		//					calendar.min,calendar.sec);    //输出闹铃时间
+	}
+	RTC_ClearITPendingBit(RTC_IT_SEC | RTC_IT_OW); //清闹钟中断
+	RTC_WaitForLastTask();
 }
+
 //判断是否是闰年函数
 //月份   1  2  3  4  5  6  7  8  9  10 11 12
 //闰年   31 29 31 30 31 30 31 31 30 31 30 31
@@ -181,6 +190,8 @@ u8 RTC_Alarm_Set(u16 syear,u8 smon,u8 sday,u8 hour,u8 min,u8 sec)
 	RTC_SetAlarm(seccount);
  
 	RTC_WaitForLastTask();	//等待最近一次对RTC寄存器的写操作完成  	
+
+	RTC_ITConfig(RTC_IT_ALR, ENABLE); //开闹钟中断
 	
 	return 0;	    
 }
