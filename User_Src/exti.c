@@ -26,7 +26,8 @@ void EXTIX_Init(void)
 	//int pin input
 	//使能IO&复用功能时钟
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);	 
-	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_3|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_1|GPIO_Pin_3|GPIO_Pin_12| \
+									GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //设置成浮空输入
  	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
@@ -38,6 +39,10 @@ void EXTIX_Init(void)
   	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
   	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   	EXTI_Init(&EXTI_InitStructure);	 	//根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
+
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource1);
+	EXTI_InitStructure.EXTI_Line = EXTI_Line1;
+	EXTI_Init(&EXTI_InitStructure); //根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
 
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line12;
@@ -60,6 +65,17 @@ void EXTIX_Init(void)
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;					//子优先级3, 最低
   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//使能外部中断通道
   	NVIC_Init(&NVIC_InitStructure); 	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+}
+
+//外部中断1
+void EXTI1_IRQHandler(void)
+{
+	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
+	{
+		DEBUG_LED = ~DEBUG_LED;
+		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
+	}
+
 }
 
 //外部中断3

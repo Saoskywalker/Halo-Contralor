@@ -28,10 +28,10 @@ void IO_Init(void)
                     GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_9);
 	
 	//INPUT
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //∏°ø’ ‰»Î
+	// GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //∏°ø’ ‰»Î
 		
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	// GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+	// GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 //	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5|\
 //									GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8|G \
