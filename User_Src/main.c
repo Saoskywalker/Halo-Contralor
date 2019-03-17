@@ -55,10 +55,13 @@ int main()
 		printf("dht11 ERROR\n"); 
 	}	 
 
-	MPU_Init(); //MPU6050
-	if(mpu_dmp_init())
+	if(MPU_Init()) //MPU6050
 	{
 		printf("MPU6050 ERROR\n");
+	}
+	else if(mpu_dmp_init())
+	{
+		printf("MPU6050 DMP ERROR\n");
 	}	 
 
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
@@ -68,10 +71,10 @@ int main()
 //prescaler 256,reload 625,over time 4s
 	IWDG_Init(IWDG_Prescaler_256,625);  
 #endif
-			
+	printf("Runing\n");
 	while(1)
 	{
-		if (Check_WKUP())
-			Sys_Enter_Standby(); //不是开机,进入待机模式
+		// if (Check_WKUP())
+		// 	Sys_Enter_Standby(); //不是开机,进入待机模式
 	}
 }

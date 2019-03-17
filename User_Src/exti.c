@@ -27,7 +27,7 @@ void EXTIX_Init(void)
 	//使能IO&复用功能时钟
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);	 
 	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_3|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //设置成上拉输入
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //设置成浮空输入
  	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
   //中断线以及中断初始化配置   下降沿触发

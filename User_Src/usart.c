@@ -233,28 +233,31 @@ void uasrt3SendByte(u8 byte){
 	while(!USART_GetFlagStatus(USART3, USART_FLAG_TC));
 }
 
-void USART1_IRQHandler(void)                	//串口1中断服务程序
+void USART1_IRQHandler(void) //串口1中断服务程序
 {
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断
+	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) //接收中断
 	{
-		USART_ReceiveData(USART1);  
-  } 
-} 
-	
-void USART2_IRQHandler(void)  
-{  
-	 if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
-	 {                  
-		USART_ReceiveData(USART2);	//读取接收到的数据					
-	 }   
+		if(USART_ReceiveData(USART1)==0xaa)
+		{
+			SystemReset();
+		}
+	}
 }
 
-void USART3_IRQHandler(void)  
-{  
-	 if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
-	 {                  
-		USART_ReceiveData(USART3);	//读取接收到的数据					
-	 }   
+void USART2_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	{
+		USART_ReceiveData(USART2); //读取接收到的数据
+	}
+}
+
+void USART3_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
+	{
+		USART_ReceiveData(USART3); //读取接收到的数据
+	}
 }
 
 #endif	
