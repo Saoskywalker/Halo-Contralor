@@ -40,7 +40,7 @@ int main()
 {	
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
-	//WKUP_Init(); //stand by & wake up init
+	WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	uart1_init(115200);	//To PC
 	printf("wake up\n");
@@ -74,7 +74,6 @@ int main()
 	printf("Runing\n");
 	while(1)
 	{
-		// if (Check_WKUP())
-		// 	Sys_Enter_Standby(); //不是开机,进入待机模式
+
 	}
 }

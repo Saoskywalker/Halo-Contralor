@@ -31,7 +31,7 @@ void Sys_Enter_Standby(void)
 }
 
 //检测WKUP脚的信号
-//返回值1:连续按下3s以上
+//返回值1:连续按下2s以上
 //      0:错误的触发	
 u8 Check_WKUP(void) 
 {
@@ -42,15 +42,15 @@ u8 Check_WKUP(void)
 		if(WKUP_KD)
 		{
 			t++;			//已经按下了 
-			delay_ms(30);
-			if(t>=70)		//按下超过3秒钟
+			delay_ms(40);
+			if(t>=50)		//按下超过2秒钟
 			{
-				return 1; 	//按下3s以上了
+				return 1; 	//按下2s以上了
 			}
 		}
 		else 
 		{ 
-			return 0; //按下不足3秒
+			return 0; //按下不足2秒
 		}
 	}
 } 

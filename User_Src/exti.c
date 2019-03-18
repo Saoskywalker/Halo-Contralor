@@ -75,7 +75,6 @@ void EXTI1_IRQHandler(void)
 		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
 	}
-
 }
 
 //外部中断3
@@ -86,7 +85,6 @@ void EXTI3_IRQHandler(void)
 		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line3); //清除线路挂起位
 	}
-
 }
 
 //外部中断10~15服务程序 
