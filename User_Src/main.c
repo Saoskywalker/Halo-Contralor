@@ -48,7 +48,7 @@ int main()
 	uart3_init(9600);	//To music
 	// Adc_Init();	
 	EXTIX_Init();
-	// RTC_Init(); //RTC init, osc have problem
+	RTC_Init(); //RTC init, osc have problem
 
 	if(DHT11_Init()) //dht11 init
 	{

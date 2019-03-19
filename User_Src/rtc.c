@@ -55,7 +55,7 @@ u8 RTC_Init(void)
 		RTC_ITConfig(RTC_IT_SEC, ENABLE);					//使能RTC秒中断
 		RTC_WaitForLastTask();										//等待最近一次对RTC寄存器的写操作完成
 		RTC_EnterConfigMode();										//允许配置
-		RTC_SetPrescaler(9600);									//设置RTC预分频的值, 外部晶振,原32767
+		RTC_SetPrescaler(32767);									//设置RTC预分频的值, 外部晶振,原32767
 		RTC_WaitForLastTask();										//等待最近一次对RTC寄存器的写操作完成
 		RTC_Set(2019, 3, 15, 10, 13, 55);					//设置时间
 		RTC_ExitConfigMode();											//退出配置模式
