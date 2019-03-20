@@ -48,30 +48,62 @@ int main()
 	uart3_init(9600);	//To music
 	// Adc_Init();	
 	EXTIX_Init();
-	RTC_Init(); //RTC init, osc have problem
+
+	delay_ms(500);
+
+	if(RTC_Init()) //RTC init, osc have problem
+	{
+		printf("RTC ERROR\n");
+		BitErrorBit.RealTimer = 1;
+	}
 
 	if(DHT11_Init()) //dht11 init
 	{
 		printf("dht11 ERROR\n"); 
+		BitErrorBit.DHT11 = 1;
 	}	 
 
 	if(MPU_Init()) //MPU6050
 	{
 		printf("MPU6050 ERROR\n");
+		BitErrorBit.MPU6050 = 1;
 	}
 	else if(mpu_dmp_init())
 	{
 		printf("MPU6050 DMP ERROR\n");
+		BitErrorBit.MPU6050 = 1;
 	}	 
 
+	if(DHT11_Init()) //dht11 init
+	{
+		printf("dht11 ERROR\n"); 
+		BitErrorBit.DHT11 = 1;
+	}	
+
+	if(DHT11_Init()) //dht11 init
+	{
+		printf("dht11 ERROR\n"); 
+		BitErrorBit.DHT11 = 1;
+	}	
+
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
-	TIM2_Int_Init(999,70);	//1ms
+	TIM2_Int_Init(99,70);	//100us
 	
 #ifndef DISABLE_IWDG
 //prescaler 256,reload 625,over time 4s
 	IWDG_Init(IWDG_Prescaler_256,625);  
 #endif
-	printf("Runing\n");
+
+	if(BitErrorBit.MPU6050==0)
+	{
+		printf("Runing\n");
+	}		
+	else
+	{
+		printf("ERROR\n");
+		Sys_Enter_Standby(); //进入待机模式
+	}
+				
 	while(1)
 	{
 

@@ -1,8 +1,7 @@
 #define DISABLE_IWDG
 
-#include "timer.h"
-#include "Set_IO.h" 
-#include "UserBaseLib.h"
+#include "AppLib.h"
+
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK战舰STM32开发板
@@ -122,26 +121,46 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 }
 
 //定时器2中断服务程序
-void TIM2_IRQHandler(void)   //TIM2中断 1ms
+void TIM2_IRQHandler(void)   //TIM2中断 100us
 {
+	static u8 Flag1msCnt = 0, KeyCnt = 0;
 	static u16 Flag1sCnt = 0;
-//	#ifdef DEBUG
-//		DEBUG_TIME_PIN = 1;
-//	#endif
+
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)  //检查TIMx更新中断发生与否
 	{
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);  //清除TIMx更新中断标志 
-		
+		// DEBUG_LED = ~DEBUG_LED;
 		 #ifndef DISABLE_IWDG
 			IWDG_FEED_INLINE();
 		 #endif
 
-		if((++Flag1sCnt>=1000))	//1s
+		BitTimeBit.Flag100us = 1;
+
+		if (++Flag1msCnt >= 10) //1ms
 		{
-			Flag1sCnt = 0;
-			// DEBUG_LED = ~DEBUG_LED;
+			Flag1msCnt = 0;
+			BitTimeBit.Flag1ms = 1;
+
+			if (WAKE_UP_PIN == 1)
+			{
+				if(++KeyCnt>=50)
+				{
+					KeyCnt = 0;
+					KeyWakeUpPress = 1;
+				}
+			}
+			else
+			{
+				KeyWakeUpPress = 0;
+				KeyCnt = 0;
+			}			
 		}
 
+		if(++Flag1sCnt>=10000)	//1s
+		{
+			Flag1msCnt = 0;
+			BitTimeBit.Flag1s = 1;
+		}
 	}
 }
 

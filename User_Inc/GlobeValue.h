@@ -23,12 +23,13 @@ typedef struct
     unsigned char DHT11 : 1;
     unsigned char MUSIC : 1;
     unsigned char DISTINGUISH : 1;
-    unsigned char RTC : 1;
+    unsigned char RealTimer : 1;
     unsigned char ms6 : 1;
     unsigned char ms7 : 1;
     unsigned char ms8 : 1;
 } _BitErrorBit;
 
 extern _BitErrorBit BitErrorBit;
+extern unsigned char KeyWakeUpPress;
 
 #endif

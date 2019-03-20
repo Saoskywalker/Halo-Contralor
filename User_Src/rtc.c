@@ -46,7 +46,7 @@ u8 RTC_Init(void)
 		if (temp >= 250)
 		{
 			printf("rtc osc error\n");
-			return 1;	//外部时钟错误返回
+			//return 1;	//外部时钟错误返回
 		}
 		RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);		//设置RTC时钟(RTCCLK),选择LSE作为RTC时钟
 		RCC_RTCCLKCmd(ENABLE);										//使能RTC时钟
