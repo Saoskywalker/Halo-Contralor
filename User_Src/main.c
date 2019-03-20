@@ -86,6 +86,7 @@ int main()
 		BitErrorBit.DHT11 = 1;
 	}	
 
+
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(99,70);	//100us
 	
