@@ -16,6 +16,7 @@
         "stm32f10x_conf.h": "c",
         "timer.h": "c",
         "rtc.h": "c",
-        "set_io.h": "c"
+        "set_io.h": "c",
+        "globevalue.h": "c"
     }
 }

@@ -33,11 +33,11 @@ extern _BitErrorBit BitErrorBit;
 extern unsigned char KeyWakeUpPress;
 
 #define UART2_RX_SIZE 8
-extern u8 UART2_RX_Cnt;
-extern u8 UATT2_RX_Cache[UART2_RX_SIZE];
+extern unsigned char UART2_RX_Cnt;
+extern unsigned char UART2_RX_Cache[UART2_RX_SIZE];
 
 #define UART3_RX_SIZE 8
-extern u8 UATT3_RX_Cache[UART3_RX_SIZE];
-extern u8 UART3_RX_Cnt;
+extern unsigned char UART3_RX_Cache[UART3_RX_SIZE];
+extern unsigned char UART3_RX_Cnt;
 
 #endif

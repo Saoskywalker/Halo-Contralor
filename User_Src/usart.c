@@ -1,6 +1,7 @@
 #include "sys.h"
 #include "usart.h"	  
 #include "GlobeValue.h"
+#include "UserBaseLib.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_UCOS
@@ -143,6 +144,7 @@ void uart2_init(u32 bound){
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);//使能USART2时钟
  
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;	//PA2 TX2
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//复用推挽
     GPIO_Init(GPIOA, &GPIO_InitStructure);
    
@@ -185,6 +187,7 @@ void uart3_init(u32 bound){
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);//使能USART3时钟
  
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;	//TX
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//复用推挽
     GPIO_Init(GPIOB, &GPIO_InitStructure);
    

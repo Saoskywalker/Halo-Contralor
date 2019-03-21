@@ -3,7 +3,7 @@
 //music command
 const u8 MusicInit[] = {0XAA, 0X0A, 0X00}; //model Init, check Drive
 const u8 MusicVol[] = {0xAA, 0x13, 0x01, 0x1E}; //Vol sets biggest
-u8 MusicPlay[] = {0XAA, 0X07, 0X02, 0X00, 0X08};
+u8 MusicPlay[] = {0xAA, 0x02, 0x00};
 const u8 MusicStop[] = {0XAA, 0X10, 0X00};
 
 //distinguish command
@@ -91,12 +91,12 @@ u8 MusicInitialization(void)
 
 	while (i < 2)
 	{
-		MusicCommand(&MusicInit[0], sizeof(MusicInit));
+		MusicCommand((u8 *)&MusicInit[0], sizeof(MusicInit));
 		delay_ms(100);
 		if (UART3_RX_Cnt != 0)
 		{
-			if ((0X01 == UATT3_RX_Cache[2]) &&
-				(0X02 == UATT3_RX_Cache[3]))
+			if ((0X01 == UART3_RX_Cache[2]) &&
+				(0X02 == UART3_RX_Cache[3]))
 			{
 				UART3_RX_Cnt = 0;
 				return 0; //success
@@ -106,7 +106,10 @@ u8 MusicInitialization(void)
 				UART3_RX_Cnt = 0;
 			}
 		}
+		i++;
 	}
+	MusicCommand((u8 *)&MusicVol[0], sizeof(MusicVol));
+	MusicCommand(&MusicPlay[0], sizeof(MusicPlay));
 	return 1; //error
 }
 
@@ -125,12 +128,12 @@ u8 DistInitialization(void)
 
 	while (i < 2)
 	{
-		DistCommand(&DistInit[0], sizeof(DistInit));
+		DistCommand((u8 *)&DistInit[0], sizeof(DistInit));
 		delay_ms(100);
 		if (UART2_RX_Cnt != 0)
 		{
-			if ((DistInitRe[0] == UATT2_RX_Cache[0]) &&
-				(DistInitRe[1] == UATT2_RX_Cache[1]))
+			if ((DistInitRe[0] == UART2_RX_Cache[0]) &&
+				(DistInitRe[1] == UART2_RX_Cache[1]))
 			{
 				UART2_RX_Cnt = 0;
 				return 0; //success
@@ -140,6 +143,7 @@ u8 DistInitialization(void)
 				UART2_RX_Cnt = 0;
 			}
 		}
+		i++;
 	}
 	return 1; //error
 }

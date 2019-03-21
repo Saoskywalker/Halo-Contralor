@@ -38,6 +38,8 @@ void WifiUart(const char *str)
  */
 int main()
 {	
+	u8 i = 0;
+
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
 	WKUP_Init(); //stand by & wake up init
@@ -48,7 +50,6 @@ int main()
 	uart3_init(9600);	//To music
 	// Adc_Init();	
 	EXTIX_Init();
-
 	delay_ms(500);
 
 	if(RTC_Init()) //RTC init, osc have problem
@@ -68,9 +69,10 @@ int main()
 		printf("MPU6050 ERROR\n");
 		BitErrorBit.MPU6050 = 1;
 	}
-	else if(mpu_dmp_init())
+	i = mpu_dmp_init();
+	if(i)
 	{
-		printf("MPU6050 DMP ERROR\n");
+		printf("MPU6050 DMP ERROR%d\n", i);
 		BitErrorBit.MPU6050 = 1;
 	}	 
 
@@ -80,7 +82,7 @@ int main()
 		BitErrorBit.DISTINGUISH = 1;
 	}	
 
-	if(MusicInitialization()) //Music init
+	if(MusicInitialization()) //Music init; Hardware bad
 	{
 		printf("Music ERROR\n"); 
 		BitErrorBit.MUSIC = 1;
@@ -101,11 +103,14 @@ int main()
 	else
 	{
 		printf("ERROR\n");
-		Sys_Enter_Standby(); //进入待机模式
+		//Sys_Enter_Standby(); //进入待机模式
 	}
 				
 	while(1)
 	{
-
+		if (Check_WKUP()) //检测键
+		{
+			Sys_Enter_Standby();
+		}
 	}
 }
