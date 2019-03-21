@@ -1,6 +1,10 @@
 #include "AppLib.h"
 
 //music command
+const u8 MusicInit[] = {0XAA, 0X0A, 0X00}; //model Init, check Drive
+const u8 MusicVol[] = {0xAA, 0x13, 0x01, 0x1E}; //Vol sets biggest
+u8 MusicPlay[] = {0XAA, 0X07, 0X02, 0X00, 0X08};
+const u8 MusicStop[] = {0XAA, 0X10, 0X00};
 
 //distinguish command
 const u8 DistInit[] = {0XA0, 0XA0, 0XA0}; //model Init
@@ -68,15 +72,42 @@ static void RGB_Decode(const u16 *i)
 	RGB_PWM(&R, &G, &B);
 }
 
-void MusicCommand(u8 i)
+void MusicCommand(u8 *i, u8 size)
 {
-	u8 CC[] = {0XAA, 0X90, 0X55, 0XAA, 0X5A, 0XA5, 0X01, 0XDE,
-			   0XE9, 0XF8, 0X00, 0X01, 0XCC, 0X33, 0XC3, 0X3C};
 	u8 j = 1, k = 0;
 
-	CC[11] = i; //open or close
-	for (; sizeof(CC) >= j; j++, k++)
-		uasrt2SendByte(CC[k]);
+	for (; j<=size; j++, i++)
+	{
+		uasrt3SendByte(*i);
+		k += *i; 
+	}
+	uasrt3SendByte(k);
+}
+
+//init return 0:OK other:ERROR
+u8 MusicInitialization(void)
+{
+	u8 i = 0;
+
+	while (i < 2)
+	{
+		MusicCommand(&MusicInit[0], sizeof(MusicInit));
+		delay_ms(100);
+		if (UART3_RX_Cnt != 0)
+		{
+			if ((0X01 == UATT3_RX_Cache[2]) &&
+				(0X02 == UATT3_RX_Cache[3]))
+			{
+				UART3_RX_Cnt = 0;
+				return 0; //success
+			}
+			else
+			{
+				UART3_RX_Cnt = 0;
+			}
+		}
+	}
+	return 1; //error
 }
 
 void DistCommand(u8 *i, u8 size)
@@ -92,7 +123,23 @@ u8 DistInitialization(void)
 {
 	u8 i = 0;
 
-	DistCommand(&DistInit, sizeof(DistInit));
-	delay_ms(100);
-	
+	while (i < 2)
+	{
+		DistCommand(&DistInit[0], sizeof(DistInit));
+		delay_ms(100);
+		if (UART2_RX_Cnt != 0)
+		{
+			if ((DistInitRe[0] == UATT2_RX_Cache[0]) &&
+				(DistInitRe[1] == UATT2_RX_Cache[1]))
+			{
+				UART2_RX_Cnt = 0;
+				return 0; //success
+			}
+			else
+			{
+				UART2_RX_Cnt = 0;
+			}
+		}
+	}
+	return 1; //error
 }

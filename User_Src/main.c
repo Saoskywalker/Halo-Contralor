@@ -74,18 +74,17 @@ int main()
 		BitErrorBit.MPU6050 = 1;
 	}	 
 
-	if(DHT11_Init()) //dht11 init
+	if(DistInitialization()) //Dist init
 	{
-		printf("dht11 ERROR\n"); 
-		BitErrorBit.DHT11 = 1;
+		printf("Dist ERROR\n"); 
+		BitErrorBit.DISTINGUISH = 1;
 	}	
 
-	if(DHT11_Init()) //dht11 init
+	if(MusicInitialization()) //Music init
 	{
-		printf("dht11 ERROR\n"); 
-		BitErrorBit.DHT11 = 1;
+		printf("Music ERROR\n"); 
+		BitErrorBit.MUSIC = 1;
 	}	
-
 
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(99,70);	//100us

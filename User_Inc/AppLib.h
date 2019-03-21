@@ -30,13 +30,12 @@
 #define FLASH_SAVE_ADDR  0X0800F800 	
 
 //distinguish command
-extern const u8 DistInit[];
-extern const u8 DistInitRe[];
 extern u8 DistGroup[];
 extern u8 DistGroupRe[];
 extern u8 DistStartOnce[];
 extern u8 DistStartOnceRe[];
-void DistCommand(u8 *i, u8 size);
 
+u8 DistInitialization(void);
+u8 MusicInitialization(void);
 
 #endif

@@ -565,6 +565,11 @@
               <FileType>1</FileType>
               <FilePath>.\User_Src\Set_IO.c</FilePath>
             </File>
+            <File>
+              <FileName>GlobeValue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User_Src\GlobeValue.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

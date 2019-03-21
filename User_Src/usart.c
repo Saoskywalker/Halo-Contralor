@@ -1,6 +1,6 @@
 #include "sys.h"
 #include "usart.h"	  
-#include "AppLib.h"
+#include "GlobeValue.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_UCOS
@@ -248,7 +248,15 @@ void USART2_IRQHandler(void)
 {
 	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
 	{
-		USART_ReceiveData(USART2); //读取接收到的数据
+		if(UART2_RX_Cnt<UART2_RX_SIZE)
+		{
+			UART2_RX_Cache[UART2_RX_Cnt] = USART_ReceiveData(USART2); //读取接收到的数据
+			UART2_RX_Cnt++;
+		}
+		else
+		{
+			USART_ReceiveData(USART2);
+		}
 	}
 }
 
@@ -256,7 +264,15 @@ void USART3_IRQHandler(void)
 {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 	{
-		USART_ReceiveData(USART3); //读取接收到的数据
+		if(UART3_RX_Cnt<UART3_RX_SIZE)
+		{
+			UART3_RX_Cache[UART3_RX_Cnt] = USART_ReceiveData(USART3); //读取接收到的数据
+			UART3_RX_Cnt++;
+		}
+		else
+		{
+			USART_ReceiveData(USART3);
+		}		
 	}
 }
 
