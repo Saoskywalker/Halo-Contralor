@@ -31,6 +31,7 @@ typedef struct
 
 extern _BitErrorBit BitErrorBit;
 extern unsigned char KeyWakeUpPress;
+extern unsigned char KeyWakeUpPressLong;
 
 #define UART2_RX_SIZE 8
 extern unsigned char UART2_RX_Cnt;

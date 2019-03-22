@@ -1,6 +1,6 @@
 #include "exti.h"
 #include "Set_IO.h"
-
+#include "usart.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //Mini STM32开发板
@@ -43,7 +43,7 @@ void EXTIX_Init(void)
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource1);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line1;
 	EXTI_Init(&EXTI_InitStructure); //根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
-
+	
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line12;
 	EXTI_Init(&EXTI_InitStructure); //根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
@@ -72,7 +72,8 @@ void EXTI1_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		printf("ms\n");
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
 	}
 }

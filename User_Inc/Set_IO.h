@@ -4,17 +4,18 @@
 #include "sys.h"
 
 //Hardware define
-#define LED_GREEN_PIN PAout(6)   //Contral pin
-#define LED_RED_PIN PAout(1)
-#define MOUTH_PIN PBout(0)
-#define CON3_PIN PBout(2)
-#define LED_BLUE_PIN PAout(15)
-#define STEP1_PIN PBout(4)  //step motor 
-#define STEP2_PIN PBout(5)
-#define STEP3_PIN PBout(6)
-#define STEP4_PIN PBout(7)
+#define LED_GREEN_PIN PBout(4)   //Contral pin
+#define LED_RED_PIN PBout(5)
+#define LED_BLUE_PIN PBout(6)
+#define MOUTH_PIN PBout(7)
+// #define STEP1_PIN PBout(4)  //step motor 
+// #define STEP2_PIN PBout(5)
+// #define STEP3_PIN PBout(6)
+// #define STEP4_PIN PBout(7)
 #define CON_5v_PIN PBout(9) //+5v contral
 #define DEBUG_LED PCout(13)
+#define MOTOR1_PIN PAout(7) //Motor
+#define MOTOR2_PIN PAout(12) 
 
 #define WAKE_UP_PIN PAin(0)
 

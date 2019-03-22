@@ -52,11 +52,11 @@ int main()
 	EXTIX_Init();
 	delay_ms(500);
 
-	if(RTC_Init()) //RTC init, osc have problem
-	{
-		printf("RTC ERROR\n");
-		BitErrorBit.RealTimer = 1;
-	}
+	// if(RTC_Init()) //RTC init, osc have problem
+	// {
+	// 	printf("RTC ERROR\n");
+	// 	BitErrorBit.RealTimer = 1;
+	// }
 
 	if(DHT11_Init()) //dht11 init
 	{
@@ -105,12 +105,27 @@ int main()
 		printf("ERROR\n");
 		//Sys_Enter_Standby(); //进入待机模式
 	}
-				
+	while(KeyWakeUpPress);	//wait key free		
 	while(1)
 	{
-		if (Check_WKUP()) //检测键
+		if (KeyWakeUpPressLong) //press 2s
 		{
 			Sys_Enter_Standby();
 		}
+		delay_ms(200);
+		LED_GREEN_PIN = ~LED_GREEN_PIN;
+		LED_RED_PIN = ~LED_RED_PIN;
+		LED_BLUE_PIN = ~LED_BLUE_PIN;
+		MOUTH_PIN = ~MOUTH_PIN;
+		MOTOR1_PIN = 1;
+		MOTOR2_PIN = 1;
+
+		delay_ms(200);
+		LED_GREEN_PIN = ~LED_GREEN_PIN;
+		LED_RED_PIN = ~LED_RED_PIN;
+		LED_BLUE_PIN = ~LED_BLUE_PIN;
+		MOUTH_PIN = ~MOUTH_PIN;
+		MOTOR1_PIN = 0;
+		MOTOR2_PIN = 0;		
 	}
 }

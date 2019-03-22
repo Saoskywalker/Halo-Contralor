@@ -20,13 +20,17 @@ void IO_Init(void)
 	GPIO_ResetBits(GPIOB, GPIO_Pin_9);
 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; //Õ∆ÕÏ ‰≥ˆ
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_2|GPIO_Pin_4|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_2|GPIO_Pin_4| \
+									GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOB, GPIO_Pin_0|GPIO_Pin_2|GPIO_Pin_4|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
+	GPIO_ResetBits(GPIOB, GPIO_Pin_0|GPIO_Pin_2|GPIO_Pin_4| \
+					GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_6|GPIO_Pin_15|GPIO_Pin_7|GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_6| \
+									GPIO_Pin_15|GPIO_Pin_7|GPIO_Pin_12;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_1|GPIO_Pin_6|GPIO_Pin_15|GPIO_Pin_7|GPIO_Pin_12);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_1|GPIO_Pin_6| \
+					GPIO_Pin_15|GPIO_Pin_7|GPIO_Pin_12);
 
 	//INPUT
 	// GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //∏°ø’ ‰»Î

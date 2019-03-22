@@ -55,7 +55,7 @@ void TIM1_PWM_Init(u16 arr,u16 psc)
 
 	TIM_OC1PreloadConfig(TIM1, TIM_OCPreload_Enable);  //CH 预装载使能
 	TIM_OC4PreloadConfig(TIM1, TIM_OCPreload_Enable);
-	TIM_CtrlPWMOutputs(TIM1,DISABLE);
+	TIM_CtrlPWMOutputs(TIM1,ENABLE);
 }
 
 //通用定时器2中断初始化
@@ -123,8 +123,8 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 //定时器2中断服务程序
 void TIM2_IRQHandler(void)   //TIM2中断 100us
 {
-	static u8 Flag1msCnt = 0, KeyCnt = 0;
-	static u16 Flag1sCnt = 0;
+	static u8 Flag1msCnt = 0;
+	static u16 Flag1sCnt = 0, KeyCnt = 0;
 
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)  //检查TIMx更新中断发生与否
 	{
@@ -145,12 +145,17 @@ void TIM2_IRQHandler(void)   //TIM2中断 100us
 			{
 				if(++KeyCnt>=50)
 				{
-					KeyCnt = 0;
 					KeyWakeUpPress = 1;
+					if(KeyCnt>=2000) //2s
+					{
+						KeyCnt = 2000;
+						KeyWakeUpPressLong = 1;
+					}
 				}
 			}
 			else
 			{
+				KeyWakeUpPressLong = 0;
 				KeyWakeUpPress = 0;
 				KeyCnt = 0;
 			}			
