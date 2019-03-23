@@ -2,6 +2,7 @@
 #include "usart.h"	  
 #include "GlobeValue.h"
 #include "UserBaseLib.h"
+#include "rtc.h" 	
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_UCOS
@@ -243,6 +244,7 @@ void USART1_IRQHandler(void) //串口1中断服务程序
 		if(USART_ReceiveData(USART1)==0xaa)
 		{
 			SystemReset();
+			// RTC_Set(2019, 3, 23, 19, 6, 0);
 		}
 	}
 }

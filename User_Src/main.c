@@ -42,7 +42,7 @@ int main()
 
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
-	//WKUP_Init(); //stand by & wake up init
+	WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	uart1_init(115200);	//To PC
 	printf("wake up\n");
@@ -109,26 +109,30 @@ int main()
 	while(KeyWakeUpPress);	//wait key free		
 	while(1)
 	{
-		if (KeyWakeUpPressLong) //press 2s
+		// if (KeyWakeUpPressLong) //press 2s
+		// {
+		// 	Sys_Enter_Standby();
+		// }
+		 if(WAKE_UP_PIN)
 		{
-			//Sys_Enter_Standby();
+			MusicInitialization();
 		}
 		delay_ms(200);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
+		LED_GREEN_PIN = 0;
 		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
+		LED_BLUE_PIN = 1;
 		MOUTH_PIN = ~MOUTH_PIN;
 		MOTOR1_PIN = 1;
-		MOTOR2_PIN = 1;
+		// MOTOR2_PIN = 1;
 		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
 		// TIM_SetCompare1(TIM1,ScrubberPWMIntensity);	
-
 		delay_ms(200);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
-		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
 		MOUTH_PIN = ~MOUTH_PIN;
-		MOTOR1_PIN = 0;
-		MOTOR2_PIN = 0;		
+		MOTOR1_PIN = 1;
+		delay_ms(200);
+		LED_RED_PIN = ~LED_RED_PIN;
+		MOUTH_PIN = ~MOUTH_PIN;
+		// MOTOR1_PIN = 0;
+		// MOTOR2_PIN = 0;		
 	}
 }

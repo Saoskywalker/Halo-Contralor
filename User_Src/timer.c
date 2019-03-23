@@ -143,12 +143,12 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 
 			if (WAKE_UP_PIN == 1)
 			{
-				if(++KeyCnt>=50)
+				if(++KeyCnt>=20)
 				{
 					KeyWakeUpPress = 1;
-					if(KeyCnt>=2000) //2s
+					if(KeyCnt>=1000) //1s
 					{
-						KeyCnt = 2000;
+						KeyCnt = 1000;
 						KeyWakeUpPressLong = 1;
 					}
 				}
@@ -157,7 +157,8 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 			{
 				KeyWakeUpPressLong = 0;
 				KeyWakeUpPress = 0;
-				KeyCnt = 0;
+				KeyCnt=0;
+
 			}			
 		}
 
