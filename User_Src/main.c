@@ -42,7 +42,7 @@ int main()
 
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
-	WKUP_Init(); //stand by & wake up init
+	//WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	uart1_init(115200);	//To PC
 	printf("wake up\n");
@@ -51,12 +51,6 @@ int main()
 	// Adc_Init();	
 	EXTIX_Init();
 	delay_ms(500);
-
-	// if(RTC_Init()) //RTC init, osc have problem
-	// {
-	// 	printf("RTC ERROR\n");
-	// 	BitErrorBit.RealTimer = 1;
-	// }
 
 	if(DHT11_Init()) //dht11 init
 	{
@@ -88,6 +82,13 @@ int main()
 		BitErrorBit.MUSIC = 1;
 	}	
 
+	if(RTC_Init()) //RTC init, osc have problem
+	{
+		printf("RTC ERROR\n");
+		BitErrorBit.RealTimer = 1;
+	}
+
+
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(99,70);	//100us
 	
@@ -110,7 +111,7 @@ int main()
 	{
 		if (KeyWakeUpPressLong) //press 2s
 		{
-			Sys_Enter_Standby();
+			//Sys_Enter_Standby();
 		}
 		delay_ms(200);
 		LED_GREEN_PIN = ~LED_GREEN_PIN;
@@ -119,6 +120,8 @@ int main()
 		MOUTH_PIN = ~MOUTH_PIN;
 		MOTOR1_PIN = 1;
 		MOTOR2_PIN = 1;
+		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
+		// TIM_SetCompare1(TIM1,ScrubberPWMIntensity);	
 
 		delay_ms(200);
 		LED_GREEN_PIN = ~LED_GREEN_PIN;

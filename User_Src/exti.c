@@ -72,8 +72,7 @@ void EXTI1_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
 	{
-		printf("ms\n");
-		// DEBUG_LED = ~DEBUG_LED;
+		DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
 	}
 }
