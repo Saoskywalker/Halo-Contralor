@@ -13,7 +13,8 @@
 #define STEP3_PIN PBout(6)
 #define STEP4_PIN PBout(7)
 #define CON_5v_PIN PBout(9) //+5v contral
-#define DEBUG_LED PCout(13)
+// #define DEBUG_LED PCout(13)
+#define DEBUG_LED PAout(15)
 #define MOTOR1_PIN PAout(7) //Motor
 #define MOTOR2_PIN PAout(12) 
 
