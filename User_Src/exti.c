@@ -72,7 +72,7 @@ void EXTI1_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
 	}
 }
@@ -82,7 +82,7 @@ void EXTI3_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line3) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line3); //清除线路挂起位
 	}
 }
@@ -92,25 +92,25 @@ void EXTI15_10_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line12) != RESET) //ear
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line12); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line13) != RESET) //left
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line13); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line14) != RESET) //right
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line14); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line15) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line15); //清除线路挂起位
 	}
 }

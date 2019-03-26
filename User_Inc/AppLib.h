@@ -29,13 +29,8 @@
 //设置FLASH 保存地址(必须为偶数)
 #define FLASH_SAVE_ADDR  0X0800F800 	
 
-//distinguish command
-extern u8 DistGroup[];
-extern u8 DistGroupRe[];
-extern u8 DistStartOnce[];
-extern u8 DistStartOnceRe[];
-
 u8 DistInitialization(void);
 u8 MusicInitialization(void);
+void MusicStart(u8 i);
 
 #endif

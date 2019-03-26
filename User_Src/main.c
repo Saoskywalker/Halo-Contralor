@@ -38,12 +38,13 @@ void WifiUart(const char *str)
  */
 int main()
 {	
-	u8 i = 0;
+	u8 i = 0, j = 0;
 
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
-	//WKUP_Init(); //stand by & wake up init
+	WKUP_Init(); //stand by & wake up init
 	IO_Init();
+	MOUTH_PIN = 1;
 	uart1_init(115200);	//To PC
 	printf("wake up\n");
 	uart2_init(115200);	//To distinguish
@@ -76,11 +77,12 @@ int main()
 		BitErrorBit.DISTINGUISH = 1;
 	}	
 
-	if(MusicInitialization()) //Music init; Hardware bad
+	if(MusicInitialization()) //Music init; RX bad
 	{
-		printf("Music ERROR\n"); 
-		BitErrorBit.MUSIC = 1;
+		// printf("Music ERROR\n"); 
+		// BitErrorBit.MUSIC = 1;
 	}	
+	MusicStart(1);
 
 	if(RTC_Init()) //RTC init, osc have problem
 	{
@@ -106,29 +108,46 @@ int main()
 		printf("ERROR\n");
 		//Sys_Enter_Standby(); //进入待机模式
 	}
-	while(KeyWakeUpPress);	//wait key free		
+	while(KeyWakeUpPress);	//wait key free
+	for (j = 0; j <= 2; j++)
+	{
+		delay_ms(225);
+		LED_GREEN_PIN = ~LED_GREEN_PIN;
+		LED_RED_PIN = ~LED_RED_PIN;
+		LED_BLUE_PIN = ~LED_BLUE_PIN;
+		// // MOUTH_PIN = ~MOUTH_PIN;
+		MOTOR1_PIN = 0; //down
+		TIM_SetCompare1(TIM1, 7199);
+		// // MOTOR2_PIN = 0;
+		delay_ms(235);
+		LED_GREEN_PIN = ~LED_GREEN_PIN;
+		LED_RED_PIN = ~LED_RED_PIN;
+		LED_BLUE_PIN = ~LED_BLUE_PIN;
+		// // MOUTH_PIN = ~MOUTH_PIN;
+		MOTOR1_PIN = 1; //up
+		TIM_SetCompare1(TIM1, 0);
+		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
+		// MOTOR2_PIN = 1;
+	}
+
+		delay_ms(225);
+		LED_GREEN_PIN = ~LED_GREEN_PIN;
+		LED_RED_PIN = ~LED_RED_PIN;
+		LED_BLUE_PIN = ~LED_BLUE_PIN;
+		// // MOUTH_PIN = ~MOUTH_PIN;
+		MOTOR1_PIN = 0; //up
+		TIM_SetCompare1(TIM1, 0);
+		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
+		// MOTOR2_PIN = 1;
 	while(1)
 	{
-		if (KeyWakeUpPressLong) //press 2s
+		// if (KeyWakeUpPressLong) //press 2s
+		// {
+		// 	Sys_Enter_Standby();
+		// }
+		 if(WAKE_UP_PIN)
 		{
-			//Sys_Enter_Standby();
-		}
-		delay_ms(200);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
-		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
-		MOUTH_PIN = ~MOUTH_PIN;
-		MOTOR1_PIN = 1;
-		MOTOR2_PIN = 1;
-		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-		// TIM_SetCompare1(TIM1,ScrubberPWMIntensity);	
-
-		delay_ms(200);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
-		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
-		MOUTH_PIN = ~MOUTH_PIN;
-		MOTOR1_PIN = 0;
-		MOTOR2_PIN = 0;		
+			MusicStart(1);
+		}	
 	}
 }
