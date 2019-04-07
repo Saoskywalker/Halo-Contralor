@@ -39,12 +39,15 @@ void WifiUart(const char *str)
 int main()
 {	
 	u8 i = 0, j = 0;
+	u8 ear_cnt = 0, KeyTemp = 0;
 
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
 	WKUP_Init(); //stand by & wake up init
 	IO_Init();
-	MOUTH_PIN = 1;
+	LED_GREEN_PIN = 1;
+	LED_RED_PIN = 1;
+	LED_BLUE_PIN = 0;
 	uart1_init(115200);	//To PC
 	printf("wake up\n");
 	uart2_init(115200);	//To distinguish
@@ -53,13 +56,12 @@ int main()
 	EXTIX_Init();
 
 	//ear reset(up)
-	u8 ear_cnt = 0;
-	HeadMotorUp(3000);
-	delay_ms(500);
+	HeadMotorUp(0);
+	delay_ms(300);
 	while(HALL_EAR_PIN)
 	{
-		delay_ms(200);
-		if(++ear_cnt>10)
+		delay_ms(100);
+		if(++ear_cnt>20)
 		{
 			BitErrorBit.ERROR = 1;
 			break;
@@ -161,7 +163,32 @@ int main()
 		}	
 		else if(KeyWakeUpPress)
 		{
-			
+			MOUTH_PIN = 1;
+			KeyTemp = 1;
+		}
+		else
+		{
+			if(KeyTemp)
+			{
+				MusicStart(1);
+				delay_ms(300);
+				HeadMotorDown(7199);
+				MOUTH_PIN = 0;
+				delay_ms(250);
+				HeadMotorUp(7199);
+				MOUTH_PIN = 1;
+				delay_ms(300);
+				HeadMotorDown(7199);
+				MOUTH_PIN = 0;
+				MusicStart(1);
+				delay_ms(250);
+				HeadMotorUp(7199);
+				MOUTH_PIN = 1;
+				delay_ms(300);
+				HeadMotorStop();
+				MOUTH_PIN = 0;
+			}
+			KeyTemp = 0;
 		}
 	}
 }

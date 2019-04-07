@@ -1,6 +1,4 @@
-#include "exti.h"
-#include "Set_IO.h"
-#include "usart.h"
+#include "AppLib.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //Mini STM32开发板
@@ -93,6 +91,7 @@ void EXTI15_10_IRQHandler(void)
 	if (EXTI_GetITStatus(EXTI_Line12) != RESET) //ear
 	{
 		// DEBUG_LED = ~DEBUG_LED;
+		HeadMotorStop();
 		EXTI_ClearITPendingBit(EXTI_Line12); //清除线路挂起位
 	}
 
