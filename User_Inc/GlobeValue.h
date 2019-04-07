@@ -24,8 +24,8 @@ typedef struct
     unsigned char MUSIC : 1;
     unsigned char DISTINGUISH : 1;
     unsigned char RealTimer : 1;
-    unsigned char ms6 : 1;
-    unsigned char ms7 : 1;
+    unsigned char ERROR : 1; //globe
+    unsigned char OTHERS : 1; //other 
     unsigned char ms8 : 1;
 } _BitErrorBit;
 

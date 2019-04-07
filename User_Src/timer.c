@@ -141,14 +141,15 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 			Flag1msCnt = 0;
 			BitTimeBit.Flag1ms = 1;
 
+			//touch key
 			if (WAKE_UP_PIN == 1)
 			{
-				if(++KeyCnt>=20)
+				if(++KeyCnt>=4)
 				{
 					KeyWakeUpPress = 1;
-					if(KeyCnt>=1000) //1s
+					if(KeyCnt>=250) //1s
 					{
-						KeyCnt = 1000;
+						KeyCnt = 250;
 						KeyWakeUpPressLong = 1;
 					}
 				}
@@ -158,7 +159,6 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 				KeyWakeUpPressLong = 0;
 				KeyWakeUpPress = 0;
 				KeyCnt=0;
-
 			}			
 		}
 

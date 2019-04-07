@@ -51,45 +51,57 @@ int main()
 	uart3_init(9600);	//To music
 	// Adc_Init();	
 	EXTIX_Init();
-	delay_ms(500);
 
+	//ear reset(up)
+	u8 ear_cnt = 0;
+	HeadMotorUp(3000);
+	delay_ms(500);
+	while(HALL_EAR_PIN)
+	{
+		delay_ms(200);
+		if(++ear_cnt>10)
+		{
+			BitErrorBit.ERROR = 1;
+			break;
+		}		
+	}
+	HeadMotorStop();
+	
 	if(DHT11_Init()) //dht11 init
 	{
 		printf("dht11 ERROR\n"); 
-		BitErrorBit.DHT11 = 1;
+		BitErrorBit.ERROR = 1;
 	}	 
 
 	if(MPU_Init()) //MPU6050
 	{
 		printf("MPU6050 ERROR\n");
-		BitErrorBit.MPU6050 = 1;
+		BitErrorBit.ERROR = 1;
 	}
-	i = mpu_dmp_init();
+	i = mpu_dmp_init(); //Usually error
 	if(i)
 	{
 		printf("MPU6050 DMP ERROR%d\n", i);
-		BitErrorBit.MPU6050 = 1;
+		// BitErrorBit.MPU6050 = 1;
 	}	 
 
 	if(DistInitialization()) //Dist init
 	{
 		printf("Dist ERROR\n"); 
-		BitErrorBit.DISTINGUISH = 1;
+		BitErrorBit.ERROR = 1;
 	}	
+
+	if(RTC_Init()) //RTC init, osc have problem
+	{
+		printf("RTC ERROR\n");
+		BitErrorBit.ERROR = 1;
+	}
 
 	if(MusicInitialization()) //Music init; RX bad
 	{
 		// printf("Music ERROR\n"); 
 		// BitErrorBit.MUSIC = 1;
 	}	
-	MusicStart(1);
-
-	if(RTC_Init()) //RTC init, osc have problem
-	{
-		printf("RTC ERROR\n");
-		BitErrorBit.RealTimer = 1;
-	}
-
 
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(99,70);	//100us
@@ -99,55 +111,57 @@ int main()
 	IWDG_Init(IWDG_Prescaler_256,625);  
 #endif
 
-	if(BitErrorBit.MPU6050==0)
+	if(BitErrorBit.ERROR==0)
 	{
 		printf("Runing\n");
+		while(KeyWakeUpPress);	//wait key free
+		MusicStart(1);
 	}		
 	else
 	{
 		printf("ERROR\n");
-		//Sys_Enter_Standby(); //进入待机模式
-	}
-	while(KeyWakeUpPress);	//wait key free
-	for (j = 0; j <= 2; j++)
-	{
-		delay_ms(225);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
-		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
-		// // MOUTH_PIN = ~MOUTH_PIN;
-		MOTOR1_PIN = 0; //down
-		TIM_SetCompare1(TIM1, 7199);
-		// // MOTOR2_PIN = 0;
-		delay_ms(235);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
-		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
-		// // MOUTH_PIN = ~MOUTH_PIN;
-		MOTOR1_PIN = 1; //up
-		TIM_SetCompare1(TIM1, 0);
-		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-		// MOTOR2_PIN = 1;
+		Sys_Enter_Standby(); //进入待机模式
 	}
 
-		delay_ms(225);
-		LED_GREEN_PIN = ~LED_GREEN_PIN;
-		LED_RED_PIN = ~LED_RED_PIN;
-		LED_BLUE_PIN = ~LED_BLUE_PIN;
-		// // MOUTH_PIN = ~MOUTH_PIN;
-		MOTOR1_PIN = 0; //up
-		TIM_SetCompare1(TIM1, 0);
-		// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-		// MOTOR2_PIN = 1;
+	// for (j = 0; j <= 2; j++)
+	// {
+	// 	delay_ms(225);
+	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
+	// 	LED_RED_PIN = ~LED_RED_PIN;
+	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
+	// 	// // MOUTH_PIN = ~MOUTH_PIN;
+	// 	MOTOR1_PIN = 0; //down
+	// 	TIM_SetCompare1(TIM1, 7199);
+	// 	// // MOTOR2_PIN = 0;
+	// 	delay_ms(235);
+	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
+	// 	LED_RED_PIN = ~LED_RED_PIN;
+	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
+	// 	// // MOUTH_PIN = ~MOUTH_PIN;
+	// 	MOTOR1_PIN = 1; //up
+	// 	TIM_SetCompare1(TIM1, 0);
+	// 	// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
+	// 	// MOTOR2_PIN = 1;
+	// }
+
+	// 	delay_ms(225);
+	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
+	// 	LED_RED_PIN = ~LED_RED_PIN;
+	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
+	// 	// // MOUTH_PIN = ~MOUTH_PIN;
+	// 	MOTOR1_PIN = 0; //up
+	// 	TIM_SetCompare1(TIM1, 0);
+	// 	// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
+	// 	// MOTOR2_PIN = 1;
 	while(1)
 	{
-		// if (KeyWakeUpPressLong) //press 2s
-		// {
-		// 	Sys_Enter_Standby();
-		// }
-		 if(WAKE_UP_PIN)
+		if(KeyWakeUpPressLong)
 		{
-			MusicStart(1);
+			Sys_Enter_Standby(); //进入待机模式
 		}	
+		else if(KeyWakeUpPress)
+		{
+			
+		}
 	}
 }

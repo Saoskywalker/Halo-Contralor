@@ -17,6 +17,9 @@
 #define DEBUG_LED PAout(15)
 #define MOTOR1_PIN PAout(7) //Motor
 #define MOTOR2_PIN PAout(12) 
+#define HALL_EAR_PIN PBin(12)
+#define HALL_RIGHT_PIN PBin(14)
+#define HALL_LEFT_PIN PBin(13)
 
 #define WAKE_UP_PIN PAin(0)
 

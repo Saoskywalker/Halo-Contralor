@@ -33,4 +33,12 @@ u8 DistInitialization(void);
 u8 MusicInitialization(void);
 void MusicStart(u8 i);
 
+void HeadMotorUp(u16 Speed);
+void HeadMotorDown(u16 Speed);
+void HeadMotorStop(void);
+
+void MiddleMotorRight(u16 Speed);
+void MiddleMotorLeft(u16 Speed);
+void MiddleMotorStop(void);
+
 #endif

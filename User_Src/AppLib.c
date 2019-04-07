@@ -152,3 +152,43 @@ u8 DistInitialization(void)
 	}
 	return 1; //error
 }
+
+//Head Motor
+void HeadMotorUp(u16 Speed)
+{
+	MOTOR1_PIN = 1; //up
+	TIM_SetCompare1(TIM1, 7199-Speed);
+}
+
+void HeadMotorDown(u16 Speed)
+{
+	MOTOR1_PIN = 0; //down
+	TIM_SetCompare1(TIM1, Speed);
+}
+
+void HeadMotorStop(void)
+{
+	MOTOR1_PIN = 0; //stop
+	TIM_SetCompare1(TIM1, 0);
+}
+
+//Middle Motor
+void MiddleMotorRight(u16 Speed)
+{
+	MOTOR2_PIN = 1; //right
+	TIM_SetCompare4(TIM1, 7199-Speed);
+}
+
+void MiddleMotorLeft(u16 Speed)
+{
+	MOTOR2_PIN = 0; //left
+	TIM_SetCompare4(TIM1, Speed);
+}
+
+void MiddleMotorStop(void)
+{
+	MOTOR2_PIN = 0; //stop
+	TIM_SetCompare4(TIM1, 0);
+}
+
+
