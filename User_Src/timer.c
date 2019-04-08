@@ -135,7 +135,7 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 		 #endif
 
 		BitTimeBit.Flag100us = 1;
-
+		RGB_PWM(&_CR, &_CG, &_CB);
 		if (++Flag1msCnt >= 10) //1ms
 		{
 			Flag1msCnt = 0;
@@ -147,9 +147,9 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 				if(++KeyCnt>=4)
 				{
 					KeyWakeUpPress = 1;
-					if(KeyCnt>=500) //2s
+					if(KeyCnt>=750) //3s
 					{
-						KeyCnt = 500;
+						KeyCnt = 750;
 						KeyWakeUpPressLong = 1;
 					}
 				}

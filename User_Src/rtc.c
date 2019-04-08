@@ -184,7 +184,7 @@ u8 RTC_Alarm_Set(u16 syear,u8 smon,u8 sday,u8 hour,u8 min,u8 sec)
 	seccount+=sec;//最后的秒钟加上去 			    
 	//设置时钟
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | 
-													RCC_APB1Periph_BKP, ENABLE);	//使能PWR和BKP外设时钟   
+							RCC_APB1Periph_BKP, ENABLE);	//使能PWR和BKP外设时钟   
 	PWR_BackupAccessCmd(ENABLE);	//使能后备寄存器访问  
 	//上面三步是必须的!
 	

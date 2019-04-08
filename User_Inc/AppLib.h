@@ -41,4 +41,8 @@ void MiddleMotorRight(u16 Speed);
 void MiddleMotorLeft(u16 Speed);
 void MiddleMotorStop(void);
 
+void RGB_PWM(u8 *i, u8 *p, u8 *g);
+void RGB_Decode(const u16 *i);
+void RGB_Renew(u8 R, u8 G, u8 B);
+
 #endif

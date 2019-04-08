@@ -12,4 +12,5 @@ unsigned char UART2_RX_Cnt = 0;
 unsigned char UART3_RX_Cache[UART3_RX_SIZE];
 unsigned char UART3_RX_Cnt = 0;
 
+unsigned char _CR = 0, _CG = 0, _CB = 0;
 

@@ -118,6 +118,7 @@ int main()
 		printf("Runing\n");
 		while(KeyWakeUpPress);	//wait key free
 		MusicStart(1);
+		RGB_Renew(0XFF, 0XFF, 0X00);
 	}		
 	else
 	{

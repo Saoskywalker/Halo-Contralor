@@ -41,4 +41,6 @@ extern unsigned char UART2_RX_Cache[UART2_RX_SIZE];
 extern unsigned char UART3_RX_Cache[UART3_RX_SIZE];
 extern unsigned char UART3_RX_Cnt;
 
+extern unsigned char _CR, _CG, _CB;
+
 #endif

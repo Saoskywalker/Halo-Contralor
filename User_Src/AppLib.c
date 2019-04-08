@@ -17,7 +17,7 @@ u8 _DistStartOnceRe[] = {0X5A, 0XFF, 0XFF};
 //RGB driver
 static const u16 RGB_Table[] = {0X0000, 0xF800, 0x07E0, 0x001F};
 //RGB565 decode
-static void RGB_PWM(u8 *i, u8 *p, u8 *g)
+void RGB_PWM(u8 *i, u8 *p, u8 *g)
 {
 	static u8 _TimeCnt = 0;
 	static u8 _RModRenew = 0, _GModRenew = 0, _BModRenew = 0;
@@ -61,7 +61,7 @@ static void RGB_PWM(u8 *i, u8 *p, u8 *g)
 	}
 }
 
-static void RGB_Decode(const u16 *i)
+void RGB_Decode(const u16 *i)
 {
 	u8 R, G, B;
 	
@@ -69,7 +69,14 @@ static void RGB_Decode(const u16 *i)
 	G = (*i&0x07E0)>>5;
 	B = *i&0x001F;
 	
-	RGB_PWM(&R, &G, &B);
+	RGB_Renew(R, G, B);
+}
+
+void RGB_Renew(u8 R, u8 G, u8 B)
+{
+	_CR = R;
+	_CG = G;
+	_CB = B;
 }
 
 void MusicCommand(u8 *i, u8 size)
