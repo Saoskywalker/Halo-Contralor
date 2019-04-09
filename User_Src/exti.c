@@ -98,12 +98,14 @@ void EXTI15_10_IRQHandler(void)
 	if (EXTI_GetITStatus(EXTI_Line13) != RESET) //left
 	{
 		// DEBUG_LED = ~DEBUG_LED;
+		void MiddleMotorStop(void);
 		EXTI_ClearITPendingBit(EXTI_Line13); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line14) != RESET) //right
 	{
 		// DEBUG_LED = ~DEBUG_LED;
+		void MiddleMotorStop(void);
 		EXTI_ClearITPendingBit(EXTI_Line14); //清除线路挂起位
 	}
 

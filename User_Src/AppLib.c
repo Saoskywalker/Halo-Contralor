@@ -1,5 +1,7 @@
 #include "AppLib.h"
 
+u8 ActionType = 0;
+
 //music command
 const u8 _MusicInit[] = {0XAA, 0X0A, 0X00}; //model Init, check Drive
 const u8 _MusicVol[] = {0xAA, 0x13, 0x01, 0x1E}; //Vol sets biggest
@@ -196,6 +198,30 @@ void MiddleMotorStop(void)
 {
 	MOTOR2_PIN = 0; //stop
 	TIM_SetCompare4(TIM1, 0);
+}
+
+void Interaction(void)
+{
+	MusicStart(1);
+	delay_ms(300);
+	HeadMotorDown(7199);
+	MOUTH_PIN = 0;
+	delay_ms(250);
+	HeadMotorUp(7199);
+	MOUTH_PIN = 1;
+	delay_ms(300);
+	HeadMotorDown(7199);
+	MOUTH_PIN = 0;
+	MusicStart(1);
+	delay_ms(250);
+	HeadMotorUp(7199);
+	MOUTH_PIN = 1;
+	delay_ms(300);
+	HeadMotorStop();
+
+	/*
+	listening
+	*/
 }
 
 

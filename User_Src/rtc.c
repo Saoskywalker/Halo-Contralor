@@ -88,6 +88,7 @@ void RTC_IRQHandler(void)
 					 calendar.w_month, calendar.w_date, calendar.hour,
 					 calendar.min, calendar.sec); //输出时间
 	}
+	
 	if (RTC_GetITStatus(RTC_IT_ALR) != RESET) //闹钟中断
 	{
 		RTC_ClearITPendingBit(RTC_IT_ALR); //清闹钟中断

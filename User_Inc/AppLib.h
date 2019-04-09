@@ -45,4 +45,13 @@ void RGB_PWM(u8 *i, u8 *p, u8 *g);
 void RGB_Decode(const u16 *i);
 void RGB_Renew(u8 R, u8 G, u8 B);
 
+extern u8 ActionType;
+
+#define ACTION_INTERACTION 1
+#define ACTION_RADOM 2
+#define ACTION_TIME 3
+#define ACTION_REMIND 4
+
+void Interaction(void);
+
 #endif

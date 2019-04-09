@@ -171,25 +171,41 @@ int main()
 		{
 			if(KeyTemp)
 			{
-				MusicStart(1);
-				delay_ms(300);
-				HeadMotorDown(7199);
-				MOUTH_PIN = 0;
-				delay_ms(250);
-				HeadMotorUp(7199);
-				MOUTH_PIN = 1;
-				delay_ms(300);
-				HeadMotorDown(7199);
-				MOUTH_PIN = 0;
-				MusicStart(1);
-				delay_ms(250);
-				HeadMotorUp(7199);
-				MOUTH_PIN = 1;
-				delay_ms(300);
-				HeadMotorStop();
-				MOUTH_PIN = 0;
+				ActionType = ACTION_INTERACTION;
 			}
 			KeyTemp = 0;
+		}
+
+		switch (ActionType)
+		{
+			case ACTION_INTERACTION:
+			{
+				Interaction();
+				break;
+			}
+
+			case ACTION_RADOM:
+			{
+				Interaction();
+				break;
+			}
+
+			case ACTION_TIME:
+			{
+				Interaction();
+				break;
+			}
+
+			case ACTION_REMIND:
+			{
+				Interaction();
+				break;
+			}
+
+			default:
+			{
+				break;
+			}
 		}
 	}
 }
