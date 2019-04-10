@@ -9,6 +9,7 @@ History:
 #define DISABLE_IWDG
 
 #include "AppLib.h"
+#include "stdlib.h"
 
 /******************************
 wifi model
@@ -43,12 +44,13 @@ int main()
 
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
+	uart1_init(115200);	//To PC
+	BitErrorBit.RealTimer = RTC_Init();	//Init RTC
 	WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	LED_GREEN_PIN = 1;
 	LED_RED_PIN = 1;
 	LED_BLUE_PIN = 0;
-	uart1_init(115200);	//To PC
 	printf("wake up\n");
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
@@ -93,7 +95,7 @@ int main()
 		BitErrorBit.ERROR = 1;
 	}	
 
-	if(RTC_Init()) //RTC init, osc have problem
+	if(BitErrorBit.RealTimer) 
 	{
 		printf("RTC ERROR\n");
 		BitErrorBit.ERROR = 1;
@@ -119,6 +121,14 @@ int main()
 		while(KeyWakeUpPress);	//wait key free
 		MusicStart(1);
 		RGB_Renew(0XFF, 0XFF, 0X00);
+		if (calendar.min >= 55) //close next 5 min
+			RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+						  calendar.hour + 1, calendar.min - 55, calendar.sec);
+		else
+			RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+						  calendar.hour, calendar.min + 5, calendar.sec);
+		srand(SysRunTime);	
+		rand()%100;
 	}		
 	else
 	{
@@ -192,13 +202,13 @@ int main()
 
 			case ACTION_TIME:
 			{
-				Interaction();
+				TimeAction();
 				break;
 			}
 
 			case ACTION_REMIND:
 			{
-				Interaction();
+				RemindAction();
 				break;
 			}
 

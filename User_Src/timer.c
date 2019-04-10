@@ -166,6 +166,7 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 		{
 			Flag1msCnt = 0;
 			BitTimeBit.Flag1s = 1;
+			SysRunTime++;
 		}
 	}
 }

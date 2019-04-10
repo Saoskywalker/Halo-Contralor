@@ -60,7 +60,7 @@ u8 RTC_Init(void)
 		RTC_WaitForLastTask();										//等待最近一次对RTC寄存器的写操作完成
 		RTC_Set(2019, 3, 23, 18, 52, 0);					//设置时间
 		RTC_ExitConfigMode();											//退出配置模式
-		BKP_WriteBackupRegister(BKP_DR1, 0X5050); //向指定的后备寄存器中写入用户程序数据
+		BKP_WriteBackupRegister(BKP_DR1, 0X5050); //向指定的后备寄存器中写入用户程序数据, 时钟初始状态
 		printf("Time init update\n");
 	}
 	else //系统继续计时
@@ -83,7 +83,11 @@ void RTC_IRQHandler(void)
 	{
 		RTC_ClearITPendingBit(RTC_IT_SEC); //清秒中断
 		// DEBUG_LED = ~DEBUG_LED;
-		RTC_Get();												 //更新时间
+		RTC_Get();							 //更新时间
+		if(((calendar.min==0)||(calendar.min==30))&&(calendar.sec==0))
+		{
+			RTCAlarm = 1;
+		}
 		printf("Time:%d-%d-%d %d:%d:%d\n", calendar.w_year,
 					 calendar.w_month, calendar.w_date, calendar.hour,
 					 calendar.min, calendar.sec); //输出时间
@@ -91,8 +95,9 @@ void RTC_IRQHandler(void)
 	
 	if (RTC_GetITStatus(RTC_IT_ALR) != RESET) //闹钟中断
 	{
+		RTCAlarm = 1;
 		RTC_ClearITPendingBit(RTC_IT_ALR); //清闹钟中断
-		RTC_Get();												 //更新时间
+		RTC_Get();						 //更新时间
 		printf("Alarm");
 		//printf("Alarm Time:%d-%d-%d %d:%d:%d\n",calendar.w_year,
 		//       calendar.w_month,calendar.w_date,calendar.hour,

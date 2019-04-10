@@ -1,4 +1,5 @@
 #include "AppLib.h"
+#include "stdlib.h"
 
 u8 ActionType = 0;
 
@@ -222,6 +223,23 @@ void Interaction(void)
 	/*
 	listening
 	*/
+
+	if(calendar.min>=55) //close next 5 min
+		RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+					calendar.hour+1, calendar.min-55, calendar.sec);
+	else
+		RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+					calendar.hour, calendar.min+5, calendar.sec);
+	srand(SysRunTime);	
+	rand()%100;
 }
 
+void TimeAction(void)
+{
+	RTCAlarm = 0;
+}
 
+void RemindAction(void)
+{
+
+}

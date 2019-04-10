@@ -1,6 +1,7 @@
 #include "wkup.h"
 #include "delay.h"
 #include "UserBaseLib.h"
+#include "GlobeValue.h"
 
 ////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -42,8 +43,8 @@ u8 Check_WKUP(void)
 		if(WKUP_KD)
 		{
 			t++;			//已经按下了 
-			delay_ms(40);
-			if(t>=50)		//按下超过2秒钟
+			delay_ms(30);
+			if(t>=50)		//按下超过1.5秒钟
 			{
 				return 1; 	//按下2s以上了
 			}
@@ -102,6 +103,9 @@ void WKUP_Init(void)
 
 	// if(RestoreFlag()==2) //继续软复位后的待机
 	// 	Sys_Standby();
-	if (Check_WKUP() == 0)
-		Sys_Standby(); //不是开机,进入待机模式
+	if(RTCAlarm==0) //是否闹钟唤醒
+	{
+		if (Check_WKUP() == 0)
+			Sys_Standby(); //不是开机,进入待机模式
+	}
 }

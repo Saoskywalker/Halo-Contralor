@@ -53,5 +53,7 @@ extern u8 ActionType;
 #define ACTION_REMIND 4
 
 void Interaction(void);
+void TimeAction(void);
+void RemindAction(void);
 
 #endif

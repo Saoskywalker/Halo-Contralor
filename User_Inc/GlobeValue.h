@@ -29,6 +29,8 @@ typedef struct
     unsigned char ms8 : 1;
 } _BitErrorBit;
 
+extern unsigned char RTCAlarm;
+
 extern _BitErrorBit BitErrorBit;
 extern unsigned char KeyWakeUpPress;
 extern unsigned char KeyWakeUpPressLong;
@@ -42,5 +44,7 @@ extern unsigned char UART3_RX_Cache[UART3_RX_SIZE];
 extern unsigned char UART3_RX_Cnt;
 
 extern unsigned char _CR, _CG, _CB;
+
+extern unsigned int SysRunTime;
 
 #endif
