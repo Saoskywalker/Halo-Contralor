@@ -46,12 +46,12 @@ int main()
 	delay_init();	//Init Systick timer
 	uart1_init(115200);	//To PC
 	BitErrorBit.RealTimer = RTC_Init();	//Init RTC
+	printf("wake up\n");
 	WKUP_Init(); //stand by & wake up init
 	IO_Init();
 	LED_GREEN_PIN = 1;
 	LED_RED_PIN = 1;
 	LED_BLUE_PIN = 0;
-	printf("wake up\n");
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
 	// Adc_Init();	
@@ -114,19 +114,21 @@ int main()
 //prescaler 256,reload 625,over time 4s
 	IWDG_Init(IWDG_Prescaler_256,625);  
 #endif
-
+	printf("Time:%d-%d-%d %d:%d:%d\n", calendar.w_year,
+				calendar.w_month, calendar.w_date, calendar.hour,
+				calendar.min, calendar.sec); //Êä³öÊ±¼ä
 	if(BitErrorBit.ERROR==0)
 	{
 		printf("Runing\n");
 		while(KeyWakeUpPress);	//wait key free
-		MusicStart(1);
+		MusicStart(V_HELLO);
 		RGB_Renew(0XFF, 0XFF, 0X00);
-		if (calendar.min >= 55) //close next 5 min
-			RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
-						  calendar.hour + 1, calendar.min - 55, calendar.sec);
-		else
-			RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
-						  calendar.hour, calendar.min + 5, calendar.sec);
+		// if (calendar.min >= 55) //close next 5 min
+		// 	RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+		// 				  calendar.hour + 1, calendar.min - 55, calendar.sec);
+		// else
+			// RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+			// 			  calendar.hour, calendar.min+5, calendar.sec);
 		srand(SysRunTime);	
 		RandTime[0] = rand()%100/2*10;
 		srand(RandTime[0]);
@@ -138,6 +140,7 @@ int main()
 			RandTime[0] = RandTime[0]^RandTime[1];
 		}
 		CloseTime = 0;
+		printf("%d, %d\n", RandTime[0], RandTime[1]);
 	}		
 	else
 	{

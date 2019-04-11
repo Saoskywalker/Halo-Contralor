@@ -17,6 +17,26 @@
 #include "inv_mpu_dmp_motion_driver.h" 
 #include "GlobeValue.h"
 
+#define V_ZERO 2
+#define V_ONE 1
+#define V_TWO 4
+#define V_THREE 3
+#define V_FOUR 6
+#define V_FIVE 5
+#define V_SIX 8
+#define V_SEVEN 7
+#define V_EIGHT 10
+#define V_NINE 9
+#define V_TEN 12
+#define V_HOUR 11
+#define V_MIN 15
+#define V_TIME_NOW 18
+#define V_HELLO 13
+#define V_GETUP 16
+#define V_TEMP 19
+#define V_HUM 17
+#define V_NULL 14
+
 //Temperature table
 #define TEMP_40 1418
 #define TEMP_38 1503

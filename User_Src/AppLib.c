@@ -15,25 +15,10 @@ u8 _DistGroupRe[] = {0X59, 0X01, 0X00};
 u8 _DistStartOnce[] = {0XAA, 0X0A, 0X00}; //start once work
 u8 DistStartOnceRe[] = {0X5A, 0XFF, 0XFF};
 
-#define V_ZERO 0
-#define V_ONE 1
-#define V_TWO 2
-#define V_THREE 3
-#define V_FOUR 4
-#define V_FIVE 5
-#define V_SIX 6
-#define V_SEVEN 7
-#define V_EIGHT 8
-#define V_NINE 9
-#define V_TEN 10
-#define V_HOUR 11
-#define V_MIN 12
-#define V_TIME_NOW 13
-#define V_HELLO 14
-#define V_GETUP 15
-#define V_TEMP 16
-#define V_HUM 17
-#define V_NULL 20
+#define DIST_BAO_GAO 0X00
+#define DIST_WEN_DU 0X01
+#define DIST_SHI_DU 0X02
+#define DIST_HA_LUO 0X03
 
 //RGB driver
 static const u16 RGB_Table[] = {0X0000, 0xF800, 0x07E0, 0x001F};
@@ -226,7 +211,7 @@ void MiddleMotorStop(void)
 
 void Interaction(void)
 {
-	MusicStart(1);
+	MusicStart(V_HELLO);
 	delay_ms(300);
 	HeadMotorDown(7199);
 	MOUTH_PIN = 0;
@@ -236,24 +221,24 @@ void Interaction(void)
 	delay_ms(300);
 	HeadMotorDown(7199);
 	MOUTH_PIN = 0;
-	MusicStart(1);
+	MusicStart(V_HELLO);
 	delay_ms(250);
 	HeadMotorUp(7199);
 	MOUTH_PIN = 1;
 	delay_ms(300);
 	HeadMotorStop();
-
+	MOUTH_PIN = 0;
 	/*
 	listening
 	*/
 	DistCommand((u8 *)&_DistStartOnce[0], sizeof(_DistStartOnce));
 
-	if(calendar.min>=55) //close next 5 min
-		RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
-					calendar.hour+1, calendar.min-55, calendar.sec);
-	else
-		RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
-					calendar.hour, calendar.min+5, calendar.sec);
+	// if(calendar.min>=55) //close next 5 min
+	// 	RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+	// 				calendar.hour+1, calendar.min-55, calendar.sec);
+	// else
+		// RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+		// 			calendar.hour, calendar.min+5, calendar.sec);
 	srand(SysRunTime);	
 	RandTime[0] = rand()%100/2*10;
 	srand(RandTime[0]);
@@ -264,6 +249,7 @@ void Interaction(void)
 		RandTime[1] = RandTime[0]^RandTime[1];
 		RandTime[0] = RandTime[0]^RandTime[1];
 	}
+	printf("%d, %d\n", RandTime[0], RandTime[1]);
 }
 
 void TimeAction(void)
@@ -315,7 +301,7 @@ void TimeAction(void)
 		i[5] = 0;
 	}
 
-	MusicStart(V_TEMP);
+	MusicStart(V_TIME_NOW);
 	delay_ms(1000);
 	delay_ms(500);
 	HeadMotorDown(7199);
@@ -351,6 +337,7 @@ void TimeAction(void)
 	delay_ms(300);
 	MusicStart(V_MIN);
 	HeadMotorStop();
+	MOUTH_PIN = 0;
 
 	if(CloseTime)
 	{
@@ -367,7 +354,7 @@ void RemindAction(void)
 void RandomAction(void)
 {
 	RandActionRun = 0;
-	MusicStart(1);
+	MusicStart(V_HELLO);
 	delay_ms(300);
 	HeadMotorDown(7199);
 	MOUTH_PIN = 0;
@@ -377,7 +364,7 @@ void RandomAction(void)
 	delay_ms(300);
 	HeadMotorDown(7199);
 	MOUTH_PIN = 0;
-	MusicStart(1);
+	MusicStart(V_HELLO);
 	delay_ms(250);
 	HeadMotorUp(7199);
 	MOUTH_PIN = 1;

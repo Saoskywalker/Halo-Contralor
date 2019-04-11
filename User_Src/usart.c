@@ -243,8 +243,8 @@ void USART1_IRQHandler(void) //串口1中断服务程序
 	{
 		if(USART_ReceiveData(USART1)==0xaa)
 		{
-			SystemReset();
-			// RTC_Set(2019, 3, 23, 19, 6, 0);
+			// SystemReset();
+			RTC_Set(2019, 3, 23, 19, 59, 30);
 		}
 	}
 }
