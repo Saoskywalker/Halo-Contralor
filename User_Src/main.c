@@ -128,7 +128,16 @@ int main()
 			RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
 						  calendar.hour, calendar.min + 5, calendar.sec);
 		srand(SysRunTime);	
-		rand()%100;
+		RandTime[0] = rand()%100/2*10;
+		srand(RandTime[0]);
+		RandTime[1] = rand()%100/2*10;
+		if(RandTime[0]>RandTime[1])
+		{
+			RandTime[0] = RandTime[0]^RandTime[1];
+			RandTime[1] = RandTime[0]^RandTime[1];
+			RandTime[0] = RandTime[0]^RandTime[1];
+		}
+		CloseTime = 0;
 	}		
 	else
 	{
@@ -186,6 +195,20 @@ int main()
 			KeyTemp = 0;
 		}
 
+		if (UART2_RX_Cnt != 0) //get Dist result
+		{
+			if ((DistStartOnceRe[0] == UART2_RX_Cache[0]) &&
+				(DistStartOnceRe[1] == UART2_RX_Cache[1]))
+				ActionType = ACTION_REMIND;
+		
+			UART2_RX_Cnt = 0;			
+		}
+
+		if(RTCAlarm)
+			ActionType = ACTION_TIME;
+		if(RandActionRun)
+			ActionType = ACTION_RADOM;
+			
 		switch (ActionType)
 		{
 			case ACTION_INTERACTION:
@@ -196,7 +219,7 @@ int main()
 
 			case ACTION_RADOM:
 			{
-				Interaction();
+				RandomAction();
 				break;
 			}
 
@@ -217,5 +240,6 @@ int main()
 				break;
 			}
 		}
+		ActionType = 0;
 	}
 }

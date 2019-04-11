@@ -15,5 +15,10 @@ unsigned char UART3_RX_Cnt = 0;
 unsigned char _CR = 0, _CG = 0, _CB = 0;
 
 unsigned char RTCAlarm = 0;
+unsigned char CloseTime = 0;
 
 unsigned int SysRunTime = 0;
+unsigned int RandTime[] = {0, 0};
+unsigned char RandActionRun = 0;
+
+unsigned char ActionType = 0;

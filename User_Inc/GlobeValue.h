@@ -30,6 +30,7 @@ typedef struct
 } _BitErrorBit;
 
 extern unsigned char RTCAlarm;
+extern unsigned char CloseTime;
 
 extern _BitErrorBit BitErrorBit;
 extern unsigned char KeyWakeUpPress;
@@ -46,5 +47,14 @@ extern unsigned char UART3_RX_Cnt;
 extern unsigned char _CR, _CG, _CB;
 
 extern unsigned int SysRunTime;
+extern unsigned int RandTime[] ;
+extern unsigned char RandActionRun;
+
+extern unsigned char ActionType;
+
+#define ACTION_INTERACTION 1
+#define ACTION_RADOM 2
+#define ACTION_TIME 3
+#define ACTION_REMIND 4
 
 #endif

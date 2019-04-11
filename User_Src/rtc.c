@@ -3,6 +3,7 @@
 #include "rtc.h" 	
 #include "usart.h"	
 #include "Set_IO.h"
+#include "GlobeValue.h"
 
 //Mini STM32开发板
 //RTC实时时钟 驱动代码			 
@@ -96,6 +97,7 @@ void RTC_IRQHandler(void)
 	if (RTC_GetITStatus(RTC_IT_ALR) != RESET) //闹钟中断
 	{
 		RTCAlarm = 1;
+		CloseTime = 1;
 		RTC_ClearITPendingBit(RTC_IT_ALR); //清闹钟中断
 		RTC_Get();						 //更新时间
 		printf("Alarm");
@@ -195,9 +197,7 @@ u8 RTC_Alarm_Set(u16 syear,u8 smon,u8 sday,u8 hour,u8 min,u8 sec)
 	//上面三步是必须的!
 	
 	RTC_SetAlarm(seccount);
- 
 	RTC_WaitForLastTask();	//等待最近一次对RTC寄存器的写操作完成  	
-
 	RTC_ITConfig(RTC_IT_ALR, ENABLE); //开闹钟中断
 	
 	return 0;	    
@@ -252,7 +252,7 @@ u8 RTC_Get(void)
 	calendar.min=(temp%3600)/60; 	//分钟	
 	calendar.sec=(temp%3600)%60; 	//秒钟
 	calendar.week=RTC_Get_Week(calendar.w_year,
-															calendar.w_month,calendar.w_date);//获取星期   
+								calendar.w_month,calendar.w_date);//获取星期   
 	return 0;
 }	 
 //获得现在是星期几

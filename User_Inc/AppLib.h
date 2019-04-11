@@ -29,6 +29,7 @@
 //设置FLASH 保存地址(必须为偶数)
 #define FLASH_SAVE_ADDR  0X0800F800 	
 
+extern u8 DistStartOnceRe[];
 u8 DistInitialization(void);
 u8 MusicInitialization(void);
 void MusicStart(u8 i);
@@ -45,15 +46,9 @@ void RGB_PWM(u8 *i, u8 *p, u8 *g);
 void RGB_Decode(const u16 *i);
 void RGB_Renew(u8 R, u8 G, u8 B);
 
-extern u8 ActionType;
-
-#define ACTION_INTERACTION 1
-#define ACTION_RADOM 2
-#define ACTION_TIME 3
-#define ACTION_REMIND 4
-
 void Interaction(void);
 void TimeAction(void);
 void RemindAction(void);
+void RandomAction(void);
 
 #endif
