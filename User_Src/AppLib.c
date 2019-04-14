@@ -12,13 +12,8 @@ const u8 _DistInit[] = {0XA0, 0XA0, 0XA0}; //model Init
 const u8 _DistInitRe[] = {0X50, 0X50, 0X16};
 u8 _DistGroup[] = {0XA9, 0X01, 0X00}; //Select group
 u8 _DistGroupRe[] = {0X59, 0X01, 0X00};
-u8 _DistStartOnce[] = {0XAA, 0X0A, 0X00}; //start once work
+u8 _DistStartOnce[] = {0XAA, 0X0A, 0X00}; //start once work, keep on 10s
 u8 DistStartOnceRe[] = {0X5A, 0XFF, 0XFF};
-
-#define DIST_BAO_GAO 0X00
-#define DIST_WEN_DU 0X01
-#define DIST_SHI_DU 0X02
-#define DIST_HA_LUO 0X03
 
 //RGB driver
 static const u16 RGB_Table[] = {0X0000, 0xF800, 0x07E0, 0x001F};
@@ -125,6 +120,7 @@ u8 MusicInitialization(void)
 	return 1; //error
 }
 
+u8 VoiceTable[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 void MusicStart(u8 i)
 {
 	_MusicPlay[4] = i;
@@ -211,6 +207,7 @@ void MiddleMotorStop(void)
 
 void Interaction(void)
 {
+	RGB_Renew(0, 20, 160);
 	MusicStart(V_HELLO);
 	delay_ms(300);
 	HeadMotorDown(7199);
@@ -228,6 +225,7 @@ void Interaction(void)
 	delay_ms(300);
 	HeadMotorStop();
 	MOUTH_PIN = 0;
+	RGB_Renew(160, 160, 0);
 	/*
 	listening
 	*/
@@ -254,7 +252,7 @@ void Interaction(void)
 
 void TimeAction(void)
 {
-	u8 i[6], j, k = 0;
+	u8 j, k = 0;
 
 	RTCAlarm = 0;
 
@@ -262,82 +260,84 @@ void TimeAction(void)
 	j = calendar.hour/10;
 	if(j!=0)
 	{
-		i[0] = j; 
-		i[1] = 10;
+		VoiceTable[0] = j; 
+		VoiceTable[1] = V_TEN;
 	}
 	else
 	{
-		i[0] = V_NULL; 
-		i[1] = V_NULL;
+		VoiceTable[0] = V_NULL; 
+		VoiceTable[1] = V_NULL;
 	}	
 	j = calendar.hour%10;
 	if(j!=0)
 	{
-		i[2] = j; 
+		VoiceTable[2] = j; 
 	}
 	else
 	{
-		i[2] = 0;
+		VoiceTable[2] = V_ZERO;
 	}
 	
 	j = calendar.min/10;
 	if(j!=0)
 	{
-		i[3] = j; 
-		i[4] = 10;
+		VoiceTable[3] = j; 
+		VoiceTable[4] = V_TEN;
 	}
 	else
 	{
-		i[3] = V_NULL; 
-		i[4] = V_NULL;
+		VoiceTable[3] = V_NULL; 
+		VoiceTable[4] = V_NULL;
 	}
 	j = calendar.min%10;
 	if(j!=0)
 	{
-		i[5] = j; 
+		VoiceTable[5] = j; 
 	}
 	else
 	{
-		i[5] = 0;
+		VoiceTable[5] = V_ZERO;
 	}
-
+	VoiceTable[6] = 0;
+	
+	RGB_Renew(160, 160, 160);
 	MusicStart(V_TIME_NOW);
 	delay_ms(1000);
 	delay_ms(500);
 	HeadMotorDown(7199);
+	MusicStart(VoiceTable[0]);
 	MOUTH_PIN = 0;
 	delay_ms(250);
-	MusicStart(i[0]);
 	HeadMotorUp(7199);
+	MusicStart(VoiceTable[1]);
 	MOUTH_PIN = 1;
 	delay_ms(300);
 	HeadMotorDown(7199);
+	MusicStart(VoiceTable[2]);
 	MOUTH_PIN = 0;
-	MusicStart(i[1]);
 	delay_ms(250);
 	HeadMotorUp(7199);
+	MusicStart(VoiceTable[3]);
 	MOUTH_PIN = 1;
-	MusicStart(i[2]);
 	delay_ms(300);
 	HeadMotorDown(7199);
+	MusicStart(VoiceTable[4]);
 	MOUTH_PIN = 0;
-	MusicStart(V_HOUR);
 	delay_ms(250);
 	HeadMotorUp(7199);
+	MusicStart(VoiceTable[5]);
 	MOUTH_PIN = 1;
-	MusicStart(i[3]);
 	delay_ms(300);
 	HeadMotorDown(7199);
-	MOUTH_PIN = 0;
-	MusicStart(i[4]);
-	delay_ms(250);
-	HeadMotorUp(7199);
-	MOUTH_PIN = 1;
-	MusicStart(i[5]);
-	delay_ms(300);
 	MusicStart(V_MIN);
+	MOUTH_PIN = 0;
+	delay_ms(250);
+	HeadMotorUp(7199);
+	MOUTH_PIN = 1;
+	delay_ms(300);
 	HeadMotorStop();
 	MOUTH_PIN = 0;
+	RGB_Renew(160, 160, 0);
 
 	if(CloseTime)
 	{
@@ -348,11 +348,12 @@ void TimeAction(void)
 
 void RemindAction(void)
 {
-	MusicStart(V_HUM);
+	MusicStart(V_HELLO);
 }
 
 void RandomAction(void)
 {
+	RGB_Renew(1, 80, 20);
 	RandActionRun = 0;
 	MusicStart(V_HELLO);
 	delay_ms(300);
@@ -370,4 +371,6 @@ void RandomAction(void)
 	MOUTH_PIN = 1;
 	delay_ms(300);
 	HeadMotorStop();
+	MOUTH_PIN = 0;
+	RGB_Renew(160, 160, 0);
 }

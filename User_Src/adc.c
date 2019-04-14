@@ -51,7 +51,7 @@ void  Adc_Init(void)
 		NVIC_InitStructure.NVIC_IRQChannel = ADC1_2_IRQn;
 		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 		NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
 		
 		ADC_ITConfig(ADC1,ADC_IT_EOC,ENABLE);	//开启ADC转换完成中断

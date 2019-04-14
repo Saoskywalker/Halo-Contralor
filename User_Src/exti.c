@@ -58,19 +58,43 @@ void EXTIX_Init(void)
 	EXTI_InitStructure.EXTI_Line = EXTI_Line15;
 	EXTI_Init(&EXTI_InitStructure); //根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
 
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//使能按键所在的外部中断通道
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;	//抢占优先级3， 最低
-  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;					//子优先级3, 最低
-  	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//使能外部中断通道
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;		//使能按键所在的外部中断通道
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;	//抢占优先级2
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		//子优先级0
+  	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		//使能外部中断通道
+  	NVIC_Init(&NVIC_InitStructure); 	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+	
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI1_IRQn;		//使能按键所在的外部中断通道
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;	//抢占优先级3,最低
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3, 最低
+  	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		//使能外部中断通道
+  	NVIC_Init(&NVIC_InitStructure); 	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;		//使能按键所在的外部中断通道
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;	//抢占优先级2
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		//子优先级0
+  	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		//使能外部中断通道
   	NVIC_Init(&NVIC_InitStructure); 	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
 }
 
 //外部中断1
-void EXTI1_IRQHandler(void)
+void EXTI1_IRQHandler(void) //voice busy
 {
+	static u8 i = 1;
 	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
 	{
-		// DEBUG_LED = ~DEBUG_LED;
+		// printf("%d,%d\n", i, VoiceTable[i]);
+		// if(VoiceTable[i]!=0)
+		// {
+		// 	MusicStart(VoiceTable[i]);
+		// 	i++;
+		// }
+		// else
+		// {
+		// 	i = 1;
+		// 	VoiceTable[1] = 0;
+		// }
+		
 		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
 	}
 }

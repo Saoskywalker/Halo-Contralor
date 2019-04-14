@@ -81,8 +81,8 @@ void TIM2_Int_Init(u16 arr,u16 psc)
 
 	//中断优先级NVIC设置
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;  //TIM2中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;  //先占优先级2级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //先占优先级1级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级0级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 
@@ -112,8 +112,8 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 
 	//中断优先级NVIC设置
 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;  //TIM3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //先占优先级2级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //先占优先级1级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级0级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 
@@ -134,9 +134,9 @@ void TIM2_IRQHandler(void)   //TIM2中断 100us
 			IWDG_FEED_INLINE();
 		 #endif
 
-		BitTimeBit.Flag100us = 1;
 		RGB_PWM(&_CR, &_CG, &_CB);
-		if (++Flag1msCnt >= 10) //1ms
+		BitTimeBit.Flag100us = 1;
+		if(++Flag1msCnt>=10) //1ms
 		{
 			Flag1msCnt = 0;
 			BitTimeBit.Flag1ms = 1;
@@ -159,12 +159,12 @@ void TIM2_IRQHandler(void)   //TIM2中断 100us
 				KeyWakeUpPressLong = 0;
 				KeyWakeUpPress = 0;
 				KeyCnt=0;
-			}			
-		}
+			}	
+		}		
 
 		if(++Flag1sCnt>=10000)	//1s
 		{
-			Flag1msCnt = 0;
+			Flag1sCnt = 0;
 			BitTimeBit.Flag1s = 1;
 			SysRunTime++;
 			if(RandTime[0]==SysRunTime)

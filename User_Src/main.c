@@ -39,7 +39,7 @@ void WifiUart(const char *str)
  */
 int main()
 {	
-	u8 i = 0, j = 0;
+	u8 i = 0;
 	u8 ear_cnt = 0, KeyTemp = 0;
 
 	NVIC_Configuration(); 	//NVIC group: 2:2
@@ -49,9 +49,7 @@ int main()
 	printf("wake up\n");
 	WKUP_Init(); //stand by & wake up init
 	IO_Init();
-	LED_GREEN_PIN = 1;
 	LED_RED_PIN = 1;
-	LED_BLUE_PIN = 0;
 	uart2_init(115200);	//To distinguish
 	uart3_init(9600);	//To music
 	// Adc_Init();	
@@ -66,6 +64,7 @@ int main()
 		if(++ear_cnt>20)
 		{
 			BitErrorBit.ERROR = 1;
+			printf("HALL_EAR ERROR\n");
 			break;
 		}		
 	}
@@ -101,10 +100,10 @@ int main()
 		BitErrorBit.ERROR = 1;
 	}
 
-	if(MusicInitialization()) //Music init; RX bad
+	if(MusicInitialization()) //Music init;
 	{
-		// printf("Music ERROR\n"); 
-		// BitErrorBit.MUSIC = 1;
+		printf("Music ERROR\n"); 
+		BitErrorBit.MUSIC = 1;
 	}	
 
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
@@ -120,9 +119,18 @@ int main()
 	if(BitErrorBit.ERROR==0)
 	{
 		printf("Runing\n");
-		while(KeyWakeUpPress);	//wait key free
+		// for(k = 0; k<=20; k++) //检查音频序号
+		// {
+		// 	MusicStart(k);
+		// 	delay_ms(1000);
+		// 	delay_ms(500);
+		// 	printf("%d\n", k);
+		// }
+		// RGB_Renew(160, 0, 80);	//现在触摸模块自动变为无,可能前面电压跳动,暂时不需
+		// while(!KeyWakeUpPress);
+		// while(KeyWakeUpPress);
 		MusicStart(V_HELLO);
-		RGB_Renew(0XFF, 0XFF, 0X00);
+		RGB_Renew(160, 160, 0);
 		// if (calendar.min >= 55) //close next 5 min
 		// 	RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
 		// 				  calendar.hour + 1, calendar.min - 55, calendar.sec);
@@ -148,36 +156,6 @@ int main()
 		Sys_Enter_Standby(); //进入待机模式
 	}
 
-	// for (j = 0; j <= 2; j++)
-	// {
-	// 	delay_ms(225);
-	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
-	// 	LED_RED_PIN = ~LED_RED_PIN;
-	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
-	// 	// // MOUTH_PIN = ~MOUTH_PIN;
-	// 	MOTOR1_PIN = 0; //down
-	// 	TIM_SetCompare1(TIM1, 7199);
-	// 	// // MOTOR2_PIN = 0;
-	// 	delay_ms(235);
-	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
-	// 	LED_RED_PIN = ~LED_RED_PIN;
-	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
-	// 	// // MOUTH_PIN = ~MOUTH_PIN;
-	// 	MOTOR1_PIN = 1; //up
-	// 	TIM_SetCompare1(TIM1, 0);
-	// 	// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-	// 	// MOTOR2_PIN = 1;
-	// }
-
-	// 	delay_ms(225);
-	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
-	// 	LED_RED_PIN = ~LED_RED_PIN;
-	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
-	// 	// // MOUTH_PIN = ~MOUTH_PIN;
-	// 	MOTOR1_PIN = 0; //up
-	// 	TIM_SetCompare1(TIM1, 0);
-	// 	// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-	// 	// MOTOR2_PIN = 1;
 	while(1)
 	{
 		if(KeyWakeUpPressLong)
@@ -200,10 +178,12 @@ int main()
 
 		if (UART2_RX_Cnt != 0) //get Dist result
 		{
-			if ((DistStartOnceRe[0] == UART2_RX_Cache[0]) &&
-				(DistStartOnceRe[1] == UART2_RX_Cache[1]))
+			if ((DistStartOnceRe[0] == UART2_RX_Cache[0]))
+				// (DIST_NI_HAO == UART2_RX_Cache[1]))
+			{
+				printf("result:%d\n", UART2_RX_Cache[1]);
 				ActionType = ACTION_REMIND;
-		
+			}		
 			UART2_RX_Cnt = 0;			
 		}
 

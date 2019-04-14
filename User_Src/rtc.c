@@ -13,7 +13,7 @@ _calendar_obj calendar;//时钟结构体
  
 static void RTC_NVIC_Config(void)
 {	
-  NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;		//RTC全局中断
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;	//先占优先级3位,从优先级3位
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;	

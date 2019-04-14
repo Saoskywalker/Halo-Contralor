@@ -111,15 +111,13 @@ void uart1_init(u32 bound){
     GPIO_Init(GPIOA, &GPIO_InitStructure);  //初始化PA10
 
    //Usart1 NVIC 配置
-
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级2
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;		//子优先级2
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
   
    //USART 初始化设置
-
 	USART_InitStructure.USART_BaudRate = bound;//一般设置为9600;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//字长为8位数据格式
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;//一个停止位
@@ -153,12 +151,12 @@ void uart2_init(u32 bound){
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //上拉输入
     GPIO_Init(GPIOA, &GPIO_InitStructure);  
 
- 	USART_DeInit(USART2);  //复位串口1
+ 	USART_DeInit(USART2);  //复位串口2
 
-   //Usart1 NVIC 配置
+   //Usart2 NVIC 配置
  	 NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级2
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		//子优先级1
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
   
@@ -198,8 +196,8 @@ void uart3_init(u32 bound){
 
  	USART_DeInit(USART3);  //复位串口3
 
-   //Usart1 NVIC 配置
-  	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+   //Usart3 NVIC 配置
+  	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级2
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
@@ -243,8 +241,18 @@ void USART1_IRQHandler(void) //串口1中断服务程序
 	{
 		if(USART_ReceiveData(USART1)==0xaa)
 		{
-			// SystemReset();
-			RTC_Set(2019, 3, 23, 19, 59, 30);
+			RTC_Set(2019, 4, 14, 20, 29, 40);
+		}
+		else if(USART_ReceiveData(USART1)==0xbb)
+		{
+			RTC_Alarm_Set(calendar.w_year, calendar.w_month, 
+				calendar.w_date, calendar.hour, 
+				calendar.min, calendar.sec+5);
+		}
+		else if(USART_ReceiveData(USART1)==0xcc)
+		{
+			//  SystemReset();
+			Sys_Enter_Standby();
 		}
 	}
 }
