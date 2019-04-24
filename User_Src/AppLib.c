@@ -16,7 +16,7 @@ u8 _DistStartOnce[] = {0XAA, 0X0A, 0X00}; //start once work, keep on 10s
 u8 DistStartOnceRe[] = {0X5A, 0XFF, 0XFF};
 
 //RGB driver
-static const u16 RGB_Table[] = {0X0000, 0xF800, 0x07E0, 0x001F};
+//static const u16 RGB_Table[] = {0X0000, 0xF800, 0x07E0, 0x001F};
 //RGB565 decode
 void RGB_PWM(u8 *i, u8 *p, u8 *g)
 {
@@ -425,18 +425,37 @@ void RemindAction(void)
 	// short temp;					//温度	
 
 	DHT11_Read_Data(&temperature,&humidity);	//读取温湿度值
-	printf("Temp:%d; Hum:%d\n", temperature, humidity);
+	printf("Temp:%d C; Hum:%d %\n", temperature, humidity);
 
 	// temp = MPU_Get_Temperature();	//得到温度值
 	//mpu_dmp_get_data(&pitch,&roll,&yaw); //运算姿态获取
-	MPU_Get_Accelerometer(&aacx,&aacy,&aacz);	//得到加速度传感器数据
-	MPU_Get_Gyroscope(&gyrox,&gyroy,&gyroz);	//得到陀螺仪数据
+	//MPU_Get_Accelerometer(&aacx,&aacy,&aacz);	//得到加速度传感器数据
+	//MPU_Get_Gyroscope(&gyrox,&gyroy,&gyroz);	//得到陀螺仪数据
 	//用自定义帧发送加速度和陀螺仪原始数据
-	mpu6050_send_data(aacx,aacy,aacz,gyrox,gyroy,gyroz);
+	//mpu6050_send_data(aacx,aacy,aacz,gyrox,gyroy,gyroz);
 	//发送运算姿态
 	// usart1_report_imu(aacx,aacy,aacz,gyrox,gyroy,
 	// 				gyroz,(int)(roll*100),(int)(pitch*100),(int)(yaw*10));
-	
+	RGB_Renew(160, 160, 160);
+	HeadMotorDown(7199);
+	MusicStart(V_HELLO);
+	delay_ms(1000);
+	MiddleMotorRight(7199);
+	delay_ms(1000);
+	MusicStart(V_HELLO);
+	MiddleMotorStop();
+	delay_ms(1000);
+	MiddleMotorLeft(7199);
+	delay_ms(1000);
+	delay_ms(1000);
+	MusicStart(V_HELLO);
+	MiddleMotorStop();
+	delay_ms(1000);
+	MiddleMotorRight(7199);
+	delay_ms(1000);
+	MiddleMotorStop();
+	RGB_Renew(160, 160, 0);
+	HeadMotorUp(7199);
 	MusicStart(V_HELLO);
 }
 

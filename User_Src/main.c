@@ -57,7 +57,7 @@ int main()
 
 	//ear reset(up)
 	HeadMotorUp(0);
-	delay_ms(300);
+	delay_ms(100);
 	while(HALL_EAR_PIN)
 	{
 		delay_ms(100);
@@ -181,7 +181,7 @@ int main()
 			if ((DistStartOnceRe[0] == UART2_RX_Cache[0]))
 				// (DIST_NI_HAO == UART2_RX_Cache[1]))
 			{
-				printf("result:%d\n", UART2_RX_Cache[1]);
+				printf("Dis:%d\n", UART2_RX_Cache[1]);
 				ActionType = ACTION_REMIND;
 			}		
 			UART2_RX_Cnt = 0;			

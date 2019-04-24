@@ -86,7 +86,8 @@ void EXTI1_IRQHandler(void) //voice busy
 		// printf("%d,%d\n", i, VoiceTable[i]);
 		// if(VoiceTable[i]!=0)
 		// {
-		// 	MusicStart(VoiceTable[i]);
+			// delay_ms(20);
+			// MusicStart(VoiceTable[i]);
 		// 	i++;
 		// }
 		// else
@@ -122,14 +123,18 @@ void EXTI15_10_IRQHandler(void)
 	if (EXTI_GetITStatus(EXTI_Line13) != RESET) //left
 	{
 		// DEBUG_LED = ~DEBUG_LED;
-		void MiddleMotorStop(void);
+		// delay_ms(20);
+		// if(HALL_LEFT_PIN==0)
+		// 	MiddleMotorStop();
 		EXTI_ClearITPendingBit(EXTI_Line13); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line14) != RESET) //right
 	{
 		// DEBUG_LED = ~DEBUG_LED;
-		void MiddleMotorStop(void);
+		// delay_ms(20);
+		// if(HALL_RIGHT_PIN==0)
+		// 	MiddleMotorStop();
 		EXTI_ClearITPendingBit(EXTI_Line14); //清除线路挂起位
 	}
 
