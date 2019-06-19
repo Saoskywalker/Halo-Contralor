@@ -17,6 +17,8 @@
         "timer.h": "c",
         "rtc.h": "c",
         "set_io.h": "c",
-        "globevalue.h": "c"
-    }
+        "globevalue.h": "c",
+        "dht11.h": "c"
+    },
+    "files.autoGuessEncoding": true
 }

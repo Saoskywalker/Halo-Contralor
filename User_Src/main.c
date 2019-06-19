@@ -45,17 +45,25 @@ int main()
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
 	uart1_init(115200);	//To PC
-	BitErrorBit.RealTimer = RTC_Init();	//Init RTC
-	WKUP_Init(); //stand by & wake up init
+	//BitErrorBit.RealTimer = RTC_Init();	//Init RTC
+	// WKUP_Init(); //stand by & wake up init
 	IO_Init();
+	uart2_init(115200);	//To Pi zero
+	uart3_init(9600);	//To ex mcu
+	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
+	Adc_Init();	
+	EXTIX_Init();
+
+	//hardware test
+	while(1)
+	{
+		
+	}
+
 	LED_GREEN_PIN = 1;
 	LED_RED_PIN = 1;
 	LED_BLUE_PIN = 0;
 	printf("wake up\n");
-	uart2_init(115200);	//To distinguish
-	uart3_init(9600);	//To music
-	// Adc_Init();	
-	EXTIX_Init();
 
 	//ear reset(up)
 	HeadMotorUp(0);
@@ -89,11 +97,11 @@ int main()
 		// BitErrorBit.MPU6050 = 1;
 	}	 
 
-	if(DistInitialization()) //Dist init
-	{
-		printf("Dist ERROR\n"); 
-		BitErrorBit.ERROR = 1;
-	}	
+	// if(DistInitialization()) //Dist init
+	// {
+	// 	printf("Dist ERROR\n"); 
+	// 	BitErrorBit.ERROR = 1;
+	// }	
 
 	if(BitErrorBit.RealTimer) 
 	{
@@ -101,13 +109,12 @@ int main()
 		BitErrorBit.ERROR = 1;
 	}
 
-	if(MusicInitialization()) //Music init; RX bad
-	{
-		// printf("Music ERROR\n"); 
-		// BitErrorBit.MUSIC = 1;
-	}	
+	// if(MusicInitialization()) //Music init; RX PIN bad
+	// {
+	// 	printf("Music ERROR\n"); 
+	// 	BitErrorBit.MUSIC = 1;
+	// }	
 
-	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	TIM2_Int_Init(99,70);	//100us
 	
 #ifndef DISABLE_IWDG
