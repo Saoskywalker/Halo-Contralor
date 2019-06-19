@@ -253,15 +253,16 @@ void USART2_IRQHandler(void)
 {
 	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
 	{
-		if(UART2_RX_Cnt<UART2_RX_SIZE)
-		{
-			UART2_RX_Cache[UART2_RX_Cnt] = USART_ReceiveData(USART2); //读取接收到的数据
-			UART2_RX_Cnt++;
-		}
-		else
-		{
-			USART_ReceiveData(USART2);
-		}
+		// if(UART2_RX_Cnt<UART2_RX_SIZE)
+		// {
+		// 	UART2_RX_Cache[UART2_RX_Cnt] = USART_ReceiveData(USART2); //读取接收到的数据
+		// 	UART2_RX_Cnt++;
+		// }
+		// else
+		// {
+		// 	USART_ReceiveData(USART2);
+		// }
+		uasrt2SendByte(USART_ReceiveData(USART2));
 	}
 }
 
@@ -269,15 +270,16 @@ void USART3_IRQHandler(void)
 {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 	{
-		if(UART3_RX_Cnt<UART3_RX_SIZE)
-		{
-			UART3_RX_Cache[UART3_RX_Cnt] = USART_ReceiveData(USART3); //读取接收到的数据
-			UART3_RX_Cnt++;
-		}
-		else
-		{
-			USART_ReceiveData(USART3);
-		}		
+		// if(UART3_RX_Cnt<UART3_RX_SIZE)
+		// {
+		// 	UART3_RX_Cache[UART3_RX_Cnt] = USART_ReceiveData(USART3); //读取接收到的数据
+		// 	UART3_RX_Cnt++;
+		// }
+		// else
+		// {
+		// 	USART_ReceiveData(USART3);
+		// }		
+		uasrt3SendByte(USART_ReceiveData(USART3));
 	}
 }
 

@@ -7,7 +7,7 @@
 #include "exti.h"
 #include "delay.h"
 #include "Set_IO.h"
-// #include "adc.h"
+#include "adc.h"
 #include "stmflash.h"
 #include "dht11.h"
 #include "rtc.h" 

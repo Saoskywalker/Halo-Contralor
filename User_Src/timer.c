@@ -135,7 +135,21 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 		 #endif
 
 		BitTimeBit.Flag100us = 1;
-		RGB_PWM(&_CR, &_CG, &_CB);
+		
+		if(WAKE_UP_PIN)
+		{
+			STEP2_PIN = 1;
+			STEP3_PIN = 1;
+			STEP4_PIN = 1;
+		}
+		else
+		{
+			STEP2_PIN = 0;
+			STEP3_PIN = 0;
+			STEP4_PIN = 0;
+		}
+		
+		//RGB_PWM(&_CR, &_CG, &_CB);
 		if (++Flag1msCnt >= 10) //1ms
 		{
 			Flag1msCnt = 0;

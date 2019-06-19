@@ -21,7 +21,7 @@
 u8 MPU_Init(void)
 { 
 	u8 res;
-  GPIO_InitTypeDef  GPIO_InitStructure;
+//   GPIO_InitTypeDef  GPIO_InitStructure;
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);//使能AFIO时钟 
 // 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);//先使能外设IO PORTA时钟 

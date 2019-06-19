@@ -27,6 +27,7 @@
 #define HALL_LEFT_PIN PAin(7)
 
 #define WAKE_UP_PIN PBin(7)
+#define LLL_PIN PBin(6) //without using
 
 void IO_Init(void);
 
