@@ -22,12 +22,13 @@
 #define BODY_M1_PIN PCout(6) 
 #define BODY_M2_PIN PCout(7) 
 
-#define HALL_EAR_PIN PAin(6)
-#define HALL_RIGHT_PIN PBin(8)
-#define HALL_LEFT_PIN PAin(7)
+#define HALL_EAR_PIN PBin(8)
+#define HALL_RIGHT_PIN PBin(6)
+#define HALL_LEFT_PIN PBin(7)
 
-#define WAKE_UP_PIN PBin(7)
-#define LLL_PIN PBin(6) //without using
+#define WAKE_UP_PIN PCin(1)
+#define LLL1_PIN PAin(6) //without using
+#define LLL2_PIN PAin(7) //without using
 
 void IO_Init(void);
 

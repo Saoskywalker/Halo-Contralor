@@ -53,14 +53,15 @@ int main()
 	TIM1_PWM_Init(7199, 0); //Double motor PWM 10kHz
 	Adc_Init();	
 	EXTIX_Init();
+	TIM2_Int_Init(99,70);	//100us
 
-	LED_GREEN_PIN = 1;
-	LED_RED_PIN = 1;
-	LED_BLUE_PIN = 0;
+	CON_5v_PIN = 1;
+	RGB_Renew(255, 255, 0);
 	printf("wake up\n");
+	delay_ms(500);
 
 	//ear reset(up)
-	HeadMotorUp(0);
+	HeadMotorUp(100);
 	delay_ms(300);
 	while(HALL_EAR_PIN)
 	{
@@ -75,27 +76,24 @@ int main()
 	
 	if(DHT11_Init()) //dht11 init
 	{
-		printf("dht11 ERROR\n"); 
+		printf("DHT11 ERROR\n"); 
 		BitErrorBit.ERROR = 1;
-	}	 
+	}
 
-	if(MPU_Init()) //MPU6050
+	if (MPU_Init()) //MPU6050
 	{
 		printf("MPU6050 ERROR\n");
 		BitErrorBit.ERROR = 1;
 	}
-	i = mpu_dmp_init(); //Usually error
-	if(i)
+	else
 	{
-		printf("MPU6050 DMP ERROR%d\n", i);
-		// BitErrorBit.MPU6050 = 1;
-	}	 
-
-	// if(DistInitialization()) //Dist init
-	// {
-	// 	printf("Dist ERROR\n"); 
-	// 	BitErrorBit.ERROR = 1;
-	// }	
+		i = mpu_dmp_init();
+		if (i)
+		{
+			printf("MPU6050 DMP ERROR %d\n", i);
+			BitErrorBit.ERROR = 1;
+		}
+	}
 
 	if(BitErrorBit.RealTimer) 
 	{
@@ -103,13 +101,19 @@ int main()
 		BitErrorBit.ERROR = 1;
 	}
 
+	// if(DistInitialization()) //Dist init
+	// {
+	// 	printf("Dist ERROR\n"); 
+	// 	BitErrorBit.ERROR = 1;
+	// }	
+
 	// if(MusicInitialization()) //Music init; RX PIN bad
 	// {
 	// 	printf("Music ERROR\n"); 
 	// 	BitErrorBit.MUSIC = 1;
 	// }	
 
-	TIM2_Int_Init(99,70);	//100us
+	while(1);
 	
 #ifndef DISABLE_IWDG
 //prescaler 256,reload 625,over time 4s
@@ -146,36 +150,6 @@ int main()
 		Sys_Enter_Standby(); //进入待机模式
 	}
 
-	// for (j = 0; j <= 2; j++)
-	// {
-	// 	delay_ms(225);
-	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
-	// 	LED_RED_PIN = ~LED_RED_PIN;
-	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
-	// 	// // MOUTH_PIN = ~MOUTH_PIN;
-	// 	MOTOR1_PIN = 0; //down
-	// 	TIM_SetCompare1(TIM1, 7199);
-	// 	// // MOTOR2_PIN = 0;
-	// 	delay_ms(235);
-	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
-	// 	LED_RED_PIN = ~LED_RED_PIN;
-	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
-	// 	// // MOUTH_PIN = ~MOUTH_PIN;
-	// 	MOTOR1_PIN = 1; //up
-	// 	TIM_SetCompare1(TIM1, 0);
-	// 	// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-	// 	// MOTOR2_PIN = 1;
-	// }
-
-	// 	delay_ms(225);
-	// 	LED_GREEN_PIN = ~LED_GREEN_PIN;
-	// 	LED_RED_PIN = ~LED_RED_PIN;
-	// 	LED_BLUE_PIN = ~LED_BLUE_PIN;
-	// 	// // MOUTH_PIN = ~MOUTH_PIN;
-	// 	MOTOR1_PIN = 0; //up
-	// 	TIM_SetCompare1(TIM1, 0);
-	// 	// TIM_SetAutoreload(TIM1, (u16)(720000/ScrubberFrequency));
-	// 	// MOTOR2_PIN = 1;
 	while(1)
 	{
 		if(KeyWakeUpPressLong)

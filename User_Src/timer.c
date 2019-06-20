@@ -136,7 +136,7 @@ void TIM2_IRQHandler(void)   //TIM2ÖÐ¶Ï 100us
 
 		BitTimeBit.Flag100us = 1;
 		
-		//RGB_PWM(&_CR, &_CG, &_CB);
+		RGB_PWM(&_CR, &_CG, &_CB);
 		if (++Flag1msCnt >= 10) //1ms
 		{
 			Flag1msCnt = 0;

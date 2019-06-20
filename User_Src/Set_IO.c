@@ -5,7 +5,7 @@ void IO_Init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOD|
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB|RCC_APB2Periph_GPIOD|
 						RCC_APB2Periph_GPIOC|RCC_APB2Periph_AFIO, ENABLE);	 
 	
 	//OUTPUT 
@@ -32,9 +32,12 @@ void IO_Init(void)
 
 	//INPUT
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //∏°ø’ ‰»Î
-		
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;                       
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;                       
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 //	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5|\
 //									GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8|G \

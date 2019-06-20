@@ -30,6 +30,7 @@ u8 RTC_Init(void)
 {
 	//检查是不是第一次配置时钟
 	u8 temp = 0;
+	u8 ii = 0;
 
 	//使能PWR和BKP外设时钟
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
@@ -48,7 +49,7 @@ u8 RTC_Init(void)
 		if (temp >= 250)
 		{
 			printf("rtc osc error\n");
-			//return 1;	//外部时钟错误返回
+			ii = 1;	//外部时钟返回错误
 		}
 		RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);		//设置RTC时钟(RTCCLK),选择LSE作为RTC时钟
 		RCC_RTCCLKCmd(ENABLE);										//使能RTC时钟
@@ -72,7 +73,7 @@ u8 RTC_Init(void)
 	}
 	RTC_NVIC_Config(); //RCT中断分组设置
 	RTC_Get();				 //更新时间
-	return 0;					 //ok
+	return ii;					 //ok
 }
 
 //RTC时钟中断
