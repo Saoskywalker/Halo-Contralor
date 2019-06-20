@@ -12,9 +12,9 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
- 
+
  //MPU IIC 延时函数
-void MPU_IIC_Delay(void)
+static __inline void MPU_IIC_Delay(void)
 {
 	delay_us(2);//iic速率调整
 }
@@ -27,7 +27,7 @@ void MPU_IIC_Init(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); //先使能外设IO PORTB时钟
 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5; // 端口配置
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;	   //推挽输出
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;	   //开漏输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	  //IO口速度为50MHz
 	GPIO_Init(GPIOA, &GPIO_InitStructure);				   //根据设定参数初始化GPIO
 

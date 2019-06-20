@@ -101,7 +101,7 @@ void uart1_init(u32 bound){
  	USART_DeInit(USART1);  //复位串口1
 	 //USART1_TX   PA.9
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9; //PA.9
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//复用推挽输出
     GPIO_Init(GPIOA, &GPIO_InitStructure); //初始化PA9
    
@@ -145,7 +145,7 @@ void uart2_init(u32 bound){
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);//使能USART2时钟
  
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;	//PA2 TX2
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//复用推挽
     GPIO_Init(GPIOA, &GPIO_InitStructure);
    
@@ -188,7 +188,7 @@ void uart3_init(u32 bound){
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);//使能USART3时钟
  
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;	//TX
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//复用推挽
     GPIO_Init(GPIOB, &GPIO_InitStructure);
    
@@ -199,7 +199,7 @@ void uart3_init(u32 bound){
  	USART_DeInit(USART3);  //复位串口3
 
    //Usart1 NVIC 配置
-  	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+  	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级2
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
@@ -262,7 +262,6 @@ void USART2_IRQHandler(void)
 		// {
 		// 	USART_ReceiveData(USART2);
 		// }
-		uasrt2SendByte(USART_ReceiveData(USART2));
 	}
 }
 
@@ -279,7 +278,6 @@ void USART3_IRQHandler(void)
 		// {
 		// 	USART_ReceiveData(USART3);
 		// }		
-		uasrt3SendByte(USART_ReceiveData(USART3));
 	}
 }
 

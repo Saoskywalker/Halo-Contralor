@@ -81,19 +81,19 @@ void EXTI9_5_IRQHandler(void)
 {
 	if (EXTI_GetITStatus(EXTI_Line6) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line6); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line7) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line7); //清除线路挂起位
 	}
 
 	if (EXTI_GetITStatus(EXTI_Line8) != RESET)
 	{
-		DEBUG_LED = ~DEBUG_LED;
+		// DEBUG_LED = ~DEBUG_LED;
 		EXTI_ClearITPendingBit(EXTI_Line8); //清除线路挂起位
 	}
 }

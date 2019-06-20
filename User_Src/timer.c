@@ -29,7 +29,7 @@ void TIM1_PWM_Init(u16 arr,u16 psc)
 	
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_11;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_Init(GPIOA, &GPIO_InitStruct);
 	
 	TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
@@ -135,19 +135,6 @@ void TIM2_IRQHandler(void)   //TIM2ÖĞ¶Ï 100us
 		 #endif
 
 		BitTimeBit.Flag100us = 1;
-		
-		if(WAKE_UP_PIN)
-		{
-			STEP2_PIN = 1;
-			STEP3_PIN = 1;
-			STEP4_PIN = 1;
-		}
-		else
-		{
-			STEP2_PIN = 0;
-			STEP3_PIN = 0;
-			STEP4_PIN = 0;
-		}
 		
 		//RGB_PWM(&_CR, &_CG, &_CB);
 		if (++Flag1msCnt >= 10) //1ms

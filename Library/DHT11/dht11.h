@@ -15,12 +15,12 @@
 //////////////////////////////////////////////////////////////////////////////////
  
 //IO方向设置
-#define DHT11_IO_IN()  {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=8<<12;}
-#define DHT11_IO_OUT() {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=3<<12;}
+#define DHT11_IO_IN()  {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=4<<12;} //浮空输入
+#define DHT11_IO_OUT() {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=7<<12;} //开漏输出
+
 ////IO操作函数											   
 #define	DHT11_DQ_OUT PCout(3) //数据端口	
 #define	DHT11_DQ_IN  PCin(3)  //数据端口	
-
 
 u8 DHT11_Init(void);//初始化DHT11
 u8 DHT11_Read_Data(u8 *temp,u8 *humi);//读取温湿度
