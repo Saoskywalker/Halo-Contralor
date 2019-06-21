@@ -1,24 +1,43 @@
-#include "sys.h"
-#include "delay.h"
-#include "rtc.h" 	
-#include "usart.h"	
-#include "Set_IO.h"
-#include "GlobeValue.h"
-
 //Mini STM32开发板
 //RTC实时时钟 驱动代码			 
 //正点原子@ALIENTEK
 //2010/6/6   
+
+#include "AppLib.h" 
+
+#define RTC_AL_EX 1	//开启RTC闹钟中断(使用外部中断线方式)
+
 _calendar_obj calendar;//时钟结构体 
  
 static void RTC_NVIC_Config(void)
 {	
-  NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;		//RTC全局中断
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;	//先占优先级3位,从优先级3位
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;	
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		//使能该通道中断
 	NVIC_Init(&NVIC_InitStructure);		//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+
+#if RTC_AL_EX
+	//如使用此中断模式, 优先级必须比RTC全家中断高
+	NVIC_InitStructure.NVIC_IRQChannel = RTCAlarm_IRQn;		//闹钟中断
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;	//先占优先级2位,从优先级3位
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;	
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		//使能该通道中断
+	NVIC_Init(&NVIC_InitStructure);		//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
+#endif
+}
+
+static void RTC_Alarm_EXIT(void)
+{
+	EXTI_InitTypeDef EXTI_InitStructure;
+
+	EXTI_ClearITPendingBit(EXTI_Line17);
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+	EXTI_InitStructure.EXTI_Line = EXTI_Line17;
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_Init(&EXTI_InitStructure);
 }
 
 //实时时钟配置
@@ -71,6 +90,9 @@ u8 RTC_Init(void)
 		RTC_ITConfig(RTC_IT_SEC, ENABLE);				//使能RTC秒中断
 		RTC_WaitForLastTask();									//等待最近一次对RTC寄存器的写操作完成
 	}
+	#if RTC_AL_EX
+	RTC_Alarm_EXIT();
+	#endif
 	RTC_NVIC_Config(); //RCT中断分组设置
 	RTC_Get();				 //更新时间
 	return ii;					 //ok
@@ -101,7 +123,7 @@ void RTC_IRQHandler(void)
 		CloseTime = 1;
 		RTC_ClearITPendingBit(RTC_IT_ALR); //清闹钟中断
 		RTC_Get();						 //更新时间
-		printf("Alarm");
+		printf("AlarmG\n\r");
 		//printf("Alarm Time:%d-%d-%d %d:%d:%d\n",calendar.w_year,
 		//       calendar.w_month,calendar.w_date,calendar.hour,
 		//					calendar.min,calendar.sec);    //输出闹铃时间
@@ -109,6 +131,20 @@ void RTC_IRQHandler(void)
 	RTC_ClearITPendingBit(RTC_IT_SEC | RTC_IT_OW); //清闹钟中断
 	RTC_WaitForLastTask();
 }
+
+#if RTC_AL_EX
+void RTCAlarm_IRQHandler(void)
+{ 
+	if(RTC_GetITStatus(RTC_IT_ALR) != RESET)
+	{
+		printf("RTC Alarm\n\r");
+	}
+    EXTI_ClearITPendingBit(EXTI_Line17);
+	RTC_WaitForLastTask();
+	RTC_ClearITPendingBit(RTC_IT_ALR);
+	RTC_WaitForLastTask();
+ }
+ #endif
 
 //判断是否是闰年函数
 //月份   1  2  3  4  5  6  7  8  9  10 11 12
@@ -157,8 +193,8 @@ u8 RTC_Set(u16 syear,u8 smon,u8 sday,u8 hour,u8 min,u8 sec)
     seccount+=(u32)min*60;	 //分钟秒钟数
 	seccount+=sec;//最后的秒钟加上去
 
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | 
-												RCC_APB1Periph_BKP, ENABLE);	//使能PWR和BKP外设时钟  
+	//使能PWR和BKP外设时钟  
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
 	PWR_BackupAccessCmd(ENABLE);	//使能RTC和后备寄存器访问 
 	RTC_SetCounter(seccount);	//设置RTC计数器的值
 

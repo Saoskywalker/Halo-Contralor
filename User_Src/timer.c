@@ -81,8 +81,8 @@ void TIM2_Int_Init(u16 arr,u16 psc)
 
 	//中断优先级NVIC设置
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;  //TIM2中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;  //先占优先级2级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级3级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //先占优先级2级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级0级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 
@@ -130,6 +130,7 @@ void TIM2_IRQHandler(void)   //TIM2中断 100us
 	{
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);  //清除TIMx更新中断标志 
 		// DEBUG_LED = ~DEBUG_LED;
+		
 		 #ifndef DISABLE_IWDG
 			IWDG_FEED_INLINE();
 		 #endif

@@ -113,7 +113,7 @@ void uart1_init(u32 bound){
    //Usart1 NVIC 配置
 
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=2 ;//抢占优先级2
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
@@ -155,7 +155,7 @@ void uart2_init(u32 bound){
 
  	USART_DeInit(USART2);  //复位串口1
 
-   //Usart1 NVIC 配置
+   //Usart2 NVIC 配置
  	 NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级3
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
@@ -198,7 +198,7 @@ void uart3_init(u32 bound){
 
  	USART_DeInit(USART3);  //复位串口3
 
-   //Usart1 NVIC 配置
+   //Usart2 NVIC 配置
   	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//抢占优先级2
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
@@ -237,14 +237,16 @@ void uasrt3SendByte(u8 byte){
 	while(!USART_GetFlagStatus(USART3, USART_FLAG_TC));
 }
 
+extern u8 testST;
 void USART1_IRQHandler(void) //串口1中断服务程序
 {
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) //接收中断
 	{
 		if(USART_ReceiveData(USART1)==0xaa)
 		{
-			SystemReset();
-			// RTC_Set(2019, 3, 23, 19, 6, 0);
+			// SystemReset();
+			// RTC_Set(2019, 6, 21, 9, 20, 0);
+			testST = 1;
 		}
 	}
 }

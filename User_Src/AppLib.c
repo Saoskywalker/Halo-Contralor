@@ -191,21 +191,21 @@ void HeadMotorUp(u16 Speed)
 {
 	HEAD_M1_PIN = 1; //up
 	HEAD_M2_PIN = 0;
-	TIM_SetCompare1(TIM1, Speed);
+	TIM_SetCompare4(TIM1, Speed);
 }
 
 void HeadMotorDown(u16 Speed)
 {
 	HEAD_M1_PIN = 0; //down
 	HEAD_M2_PIN = 1;
-	TIM_SetCompare1(TIM1, Speed);
+	TIM_SetCompare4(TIM1, Speed);
 }
 
 void HeadMotorStop(void)
 {
 	HEAD_M1_PIN = 0; //stop
 	HEAD_M2_PIN = 0;
-	TIM_SetCompare1(TIM1, 0);
+	TIM_SetCompare4(TIM1, 0);
 }
 
 //Middle Motor
@@ -213,21 +213,21 @@ void MiddleMotorRight(u16 Speed)
 {
 	BODY_M1_PIN = 1; //right
 	BODY_M2_PIN = 0;
-	TIM_SetCompare4(TIM1, Speed);
+	TIM_SetCompare1(TIM1, Speed);
 }
 
 void MiddleMotorLeft(u16 Speed)
 {
 	BODY_M1_PIN = 0; //left
 	BODY_M2_PIN = 1;
-	TIM_SetCompare4(TIM1, Speed);
+	TIM_SetCompare1(TIM1, Speed);
 }
 
 void MiddleMotorStop(void)
 {
 	BODY_M1_PIN = 0; //stop
 	BODY_M2_PIN = 0;
-	TIM_SetCompare4(TIM1, 0);
+	TIM_SetCompare1(TIM1, 0);
 }
 
 void Interaction(void)

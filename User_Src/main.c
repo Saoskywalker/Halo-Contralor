@@ -1,6 +1,6 @@
 /**********************************************************************
 Name: Halo Contralor 
-Version: v0.5 Beta
+Version: v0.7 Beta
 Editor: Aysi
 Function: 
 History: 
@@ -37,6 +37,7 @@ void WifiUart(const char *str)
 	}
 }
  */
+u8 testST = 0;
 int main()
 {	
 	u8 i = 0, j = 0;
@@ -45,8 +46,8 @@ int main()
 	NVIC_Configuration(); 	//NVIC group: 2:2
 	delay_init();	//Init Systick timer
 	uart1_init(115200);	//To PC
-	BitErrorBit.RealTimer = RTC_Init();	//Init RTC
-	// WKUP_Init(); //stand by & wake up init
+	BitErrorBit.RealTimer = RTC_Init();
+	WKUP_Init(); 
 	IO_Init();
 	uart2_init(115200);	//To Pi zero
 	uart3_init(115200);	//To ex mcu
@@ -61,7 +62,7 @@ int main()
 	delay_ms(500);
 
 	//ear reset(up)
-	HeadMotorUp(100);
+	HeadMotorUp(700);
 	delay_ms(300);
 	while(HALL_EAR_PIN)
 	{
@@ -72,8 +73,14 @@ int main()
 			break;
 		}		
 	}
-	HeadMotorStop();
+	// HeadMotorStop();
 	
+	if(BitErrorBit.RealTimer) 
+	{
+		printf("RTC ERROR\n");
+		BitErrorBit.ERROR = 1;
+	}
+
 	if(DHT11_Init()) //dht11 init
 	{
 		printf("DHT11 ERROR\n"); 
@@ -95,12 +102,6 @@ int main()
 		}
 	}
 
-	if(BitErrorBit.RealTimer) 
-	{
-		printf("RTC ERROR\n");
-		BitErrorBit.ERROR = 1;
-	}
-
 	// if(DistInitialization()) //Dist init
 	// {
 	// 	printf("Dist ERROR\n"); 
@@ -113,7 +114,16 @@ int main()
 	// 	BitErrorBit.MUSIC = 1;
 	// }	
 
-	while(1);
+	while(1)
+	{
+		if(testST)
+		{
+			testST = 0;
+			RTC_Alarm_Set(calendar.w_year, calendar.w_month, calendar.w_date,
+					calendar.hour, calendar.min, calendar.sec+10);
+			 SystemReset();
+		}
+	}
 	
 #ifndef DISABLE_IWDG
 //prescaler 256,reload 625,over time 4s

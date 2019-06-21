@@ -1,4 +1,3 @@
-#include "AppLib.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //Mini STM32开发板
@@ -11,7 +10,8 @@
 //Copyright(C) 正点原子 2009-2019
 //All rights reserved	  
 ////////////////////////////////////////////////////////////////////////////////// 	  
- 
+
+#include "AppLib.h" 
 
 //外部中断0服务程序
 //初始化PA0,PA13,PA15为中断输入.
@@ -51,16 +51,6 @@ void EXTIX_Init(void)
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;					//子优先级3, 最低
   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//使能外部中断通道
   	NVIC_Init(&NVIC_InitStructure); 	//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
-}
-
-//外部中断1
-void EXTI1_IRQHandler(void)
-{
-	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
-	{
-		// DEBUG_LED = ~DEBUG_LED;
-		EXTI_ClearITPendingBit(EXTI_Line1); //清除线路挂起位
-	}
 }
 
 //外部中断3

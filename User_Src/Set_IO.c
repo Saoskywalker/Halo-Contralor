@@ -36,9 +36,6 @@ void IO_Init(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;                       
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;                       
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-
 //	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5|\
 //									GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8|G \
 //									PIO_Pin_10|GPIO_Pin_12|GPIO_Pin_15;		 
